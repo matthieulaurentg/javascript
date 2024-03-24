@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tetris</title>
+  <style>
+    canvas {
+      border: 1px solid black;
+      display: block;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="game" width="240" height="400"></canvas>
+  <script>
+    const canvas = document.getElementById('game');
+    const ctx = canvas.getContext('2d');
+    const blockSize = 20;
+    const rows = canvas.height / blockSize;
+    const columns = canvas.width / blockSize;
+
+    let board = [];
+    for (let row = 0; row < rows; row++) {
+      board[row] = [];
+      for (let col = 0; col < columns; col++) {
+        board[row][col] = 0;
+      }
+    }
+
+    const shapes = [
+      [
+        [0, 1, 0],
+        [1, 1, 1],
+        [0, 0, 0]
+      ],
+      [
+        [0, 2, 0],
+        [0, 2, 2],
+        [0, 2, 0]
+      ],
+      [
+        [0, 3, 0],
+        [0, 3, 0],
+        [3, 3, 0]
+      ],
+      [
+        [4, 0, 0],
+        [4, 4, 0],
+        [4, 0, 0]
+      ],
+      [
+        [0, 0, 5],
+        [5, 5, 5],
+        [0, 0, 0]
+      ],
+      [
+        [0, 6, 6],
+        [6, 6, 0],
+        [0, 0, 0]
+      ],
+      [
+        [0, 7, 0],
+        [7, 7, 7],
+        [0, 0, 0]
+      ]
+    ];
+
+    let currentShape = Math.floor(Math.random() * shapes.length);
+    console.log('Current Shape:', currentShape);
+    let currentRotation = 0;
+    console.log('Current Rotation:', currentRotation);
+    let currentX = Math.floor(columns / 2) - 1;
+    console.log('Current X:', currentX);
+    let currentY = 0;
+    console.log('Current Y:', currentY);
+
+    function drawShape() {
+      console.log('Drawing Shape');
+      for (let row = 0; row < shapes[currentShape][currentRotation].length; row++) {
+        for (let col = 0; col < shapes[currentShape][currentRotation][row].length; col++) {
+          if (shapes[currentShape][currentRotation][row][col]) {
+            const x = currentX + col;
+            const y = currentY + row;
+            ctx.fillStyle = `rgb(${shapes[currentShape][currentRotation][row][col] * 30}, 0, 0)`;
+            ctx.fillRect(x * blockSize, y * blockSize, blockSize, blockSize);
+          }
+        }
+      }
+    }
+
+    function drawBoard() {
+      console.log('Drawing Board');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let row = 0; row < board.length; row++) {
+        for (let col = 0; col < board[row].length; col++) {
+          if (board[row][col]) {
+            ctx.fillStyle = `rgb(${board[row][col] * 30}, 0, 0)`;
+            ctx.fillRect(col * blockSize, row * blockSize, blockSize, blockSize);
+          }
+        }
+      }
+      drawShape();
+    }
+
+    function moveDown() {
+      const nextY = currentY + 1;
+      console.log('Trying to move down to Y:', nextY);
+      if (isValidMove(currentX, nextY, currentRotation)) {
+        currentY = nextY;
+        console.log('Move down successful');
+        return true;
+      }
+      console.log('Move down failed');
+      return false;
+    }
+
+    function moveLeft() {
+      const nextX = currentX - 1;
+      console.log('Trying to move left to X:', nextX);
+      if (isValidMove(nextX, currentY, currentRotation)) {
+        currentX = nextX;
+        console.log('Move left successful');
+      } else {
+        console.log('Move left failed');
+      }
+    }
+
+    function moveRight() {
+      const nextX = currentX + 1;
+      console.log('Trying to move right to X:', nextX);
+      if (isValidMove(nextX, currentY, currentRotation)) {
+        currentX = nextX;
+        console.log('Move right successful');
+      } else {
+        console.log('Move right failed');
+      }
+    }
+
+    function rotate() {
+      const nextRotation = (currentRotation + 1) % shapes[currentShape].length;
+      console.log('Trying to rotate to rotation:', nextRotation);
+      if (isValidMove(currentX, currentY, nextRotation)) {
+        currentRotation = nextRotation;
+        console.log('Rotation successful');
+      } else {
+        console.log('Rotation failed');
+      }
+    }
+
+    function isValidMove(x, y, rotation) {
+      console.log('Checking valid move at X:', x, 'Y:', y, 'Rotation:', rotation);
+      for (let row = 0; row < shapes[currentShape][rotation].length; row++) {
+        for (let col = 0; col < shapes[currentShape][rotation][row].length; col++) {
+          if (shapes[currentShape][rotation][row][col]) {
+            const newX = x + col;
+            const newY = y + row;
+            if (
+              newX < 0 ||
+              newX >= columns ||
+              newY >= rows ||
+              (newY >= 0 && board[newY][newX])
+            ) {
+              console.log('Invalid move detected');
+              return false;
+            }
+          }
+        }
+      }
+      console.log('Valid move');
+      return true;
+    }
+
+    // ... rest of the code ...
+
+    resetGame();
+    gameLoop();
+  </script>
+</body>
+</html>
