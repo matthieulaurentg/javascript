@@ -115,6 +115,7 @@
     let playerPokemon;
     let opponentPokemon;
     let opponentName;
+    let opponentMoves;
 
     // Select Pokemon
     function selectPokemon(pokemon) {
@@ -130,16 +131,17 @@
     // Generate opponent
     function generateOpponent() {
       const opponents = [
-        { name: 'Ash', pokemon: pikachu },
-        { name: 'Misty', pokemon: squirtle },
-        { name: 'Brock', pokemon: geodude },
-        { name: 'Gary', pokemon: charmander },
-        { name: 'Jessie', pokemon: butterfree },
-        { name: 'James', pokemon: bulbasaur }
+        { name: 'Ash', pokemon: pikachu, moves: pikachu.moves },
+        { name: 'Misty', pokemon: squirtle, moves: squirtle.moves },
+        { name: 'Brock', pokemon: geodude, moves: geodude.moves },
+        { name: 'Gary', pokemon: charmander, moves: charmander.moves },
+        { name: 'Jessie', pokemon: butterfree, moves: butterfree.moves },
+        { name: 'James', pokemon: bulbasaur, moves: bulbasaur.moves }
       ];
       const randomIndex = Math.floor(Math.random() * opponents.length);
       opponentName = opponents[randomIndex].name;
       opponentPokemon = opponents[randomIndex].pokemon;
+      opponentMoves = opponents[randomIndex].moves;
     }
 
     // Battle functions
@@ -175,7 +177,7 @@
 
     function enemyTurn() {
       const randomMove = Math.floor(Math.random() * 4);
-      opponentPokemon.useMove(opponentPokemon.moves[randomMove], playerPokemon);
+      opponentPokemon.useMove(opponentMoves[randomMove], playerPokemon);
       updateUI();
       checkWinner();
     }
@@ -239,4 +241,4 @@
     }
   </script>
 </body>
-</html> 
+</html>
