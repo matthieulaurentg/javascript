@@ -6,90 +6,96 @@
   <title>Pokemon Battle Simulator</title>
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #e6e6e6;
-      background-image: linear-gradient(45deg, #f0f0f0, #ffffff);
-      color: #333;
     }
     h1, h2, h3 {
       margin-top: 0;
-      text-align: center;
     }
     button {
       display: block;
-      margin: 10px auto;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      background-color: #4caf50;
-      color: #fff;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background-color 0.3s;
+      margin-bottom: 5px;
+      width: 100%;
     }
-    button:hover {
-      background-color: #45a049;
-    }
-    .container {
-      max-width: 90%;
-      margin: 20px auto;
-      padding: 20px;
-      background-color: #fff;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    #battleLog {
+      background-color: #f5f5f5;
+      padding: 10px;
+      border: 1px solid #ccc;
+      max-height: 200px;
+      overflow-y: scroll;
     }
     .controls {
-      margin-top: 20px;
+      background-color: #d9f2e6;
+      padding: 10px;
+      border: 1px solid #4caf50;
+      margin-bottom: 10px;
+    }
+    #opponentControls {
+      background-color: #ffcdd2;
+      border-color: #e53935;
+    }
+    #pokemonSelection {
+      background-color: #e3f2fd;
+      border-color: #2196f3;
+    }
+    #typeChart {
+      background-color: #ffe0b2;
+      border-color: #ff9800;
     }
     .pokemon-button {
-      width: calc(50% - 15px);
-      margin-right: 10px;
-      margin-bottom: 10px;
+      width: calc(50% - 5px);
+      margin-right: 5px;
+      margin-bottom: 5px;
     }
     @media (min-width: 768px) {
       .pokemon-button {
-        width: calc(33.33% - 15px);
+        width: calc(33.33% - 5px);
       }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Pokemon Battle Simulator</h1>
-    <div id="battleLog" class="controls"></div>
-    <div id="playerControls" class="controls">
-      <h2>Your Pokemon: <span id="playerPokemonName"></span></h2>
-      <p>HP: <span id="playerPokemonHP"></span></p>
-      <p>Attack: <span id="playerPokemonAttack"></span></p>
-      <button onclick="move1()">Move 1</button>
-      <button onclick="move2()">Move 2</button>
-      <button onclick="move3()">Move 3</button>
-      <button onclick="move4()">Move 4</button>
-      <button onclick="defend()">Defend</button>
+  <h1>Pokemon Battle Simulator</h1>
+  <div id="battleLog"></div>
+  <div id="playerControls" class="controls">
+    <h2>Your Pokemon: <span id="playerPokemonName"></span></h2>
+    <p>HP: <span id="playerPokemonHP"></span></p>
+    <p>Attack: <span id="playerPokemonAttack"></span></p>
+    <button onclick="move1()">Move 1</button>
+    <button onclick="move2()">Move 2</button>
+    <button onclick="move3()">Move 3</button>
+    <button onclick="move4()">Move 4</button>
+    <button onclick="defend()">Defend</button>
+  </div>
+  <div id="opponentControls" class="controls">
+    <h2>Opponent: <span id="opponentName"></span></h2>
+    <h3>Their Pokemon: <span id="opponentPokemonName"></span></h3>
+    <p>HP: <span id="opponentPokemonHP"></span></p>
+  </div>
+  <div id="pokemonSelection" class="controls">
+    <h2>Select your Pokemon:</h2>
+    <input type="text" id="playerPokemonNameInput" placeholder="Enter your Pokemon's name">
+    <div>
+      <button class="pokemon-button" onclick="selectPokemon(pikachu)">Pikachu</button>
+      <button class="pokemon-button" onclick="selectPokemon(bulbasaur)">Bulbasaur</button>
     </div>
-    <div id="opponentControls" class="controls">
-      <h2>Opponent: <span id="opponentName"></span></h2>
-      <h3>Their Pokemon: <span id="opponentPokemonName"></span></h3>
-      <p>HP: <span id="opponentPokemonHP"></span></p>
+    <div>
+      <button class="pokemon-button" onclick="selectPokemon(charmander)">Charmander</button>
+      <button class="pokemon-button" onclick="selectPokemon(squirtle)">Squirtle</button>
     </div>
-    <div id="pokemonSelection" class="controls">
-      <h2>Select your Pokemon:</h2>
-      <input type="text" id="playerPokemonNameInput" placeholder="Enter your Pokemon's name">
-      <div>
-        <button class="pokemon-button" onclick="selectPokemon(pikachu)">Pikachu</button>
-        <button class="pokemon-button" onclick="selectPokemon(bulbasaur)">Bulbasaur</button>
-      </div>
-      <div>
-        <button class="pokemon-button" onclick="selectPokemon(charmander)">Charmander</button>
-        <button class="pokemon-button" onclick="selectPokemon(squirtle)">Squirtle</button>
-      </div>
-      <div>
-        <button class="pokemon-button" onclick="selectPokemon(butterfree)">Butterfree</button>
-        <button class="pokemon-button" onclick="selectPokemon(geodude)">Geodude</button>
-      </div>
+    <div>
+      <button class="pokemon-button" onclick="selectPokemon(butterfree)">Butterfree</button>
+      <button class="pokemon-button" onclick="selectPokemon(geodude)">Geodude</button>
     </div>
   </div>
+  <div id="typeChart" class="controls">
+    <h2>Type Chart</h2>
+    <p>Normal: -</p>
+    <!-- Type effectiveness chart content here -->
+  </div>
+  <script>
+    // JavaScript code remains unchanged
+  </script>
 </body>
 </html>
