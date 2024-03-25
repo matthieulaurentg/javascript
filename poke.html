@@ -82,16 +82,17 @@
         this.name = name;
         this.type = type;
         this.hp = hp;
+        this.maxHp = hp;
         this.attack = attack;
         this.defense = defense;
         this.moves = moves;
       }
 
       useMove(move, opponent) {
-        const damage = Math.max(this.attack * move.power - opponent.defense, 0);
+        const damage = Math.max(this.attack * move.power, 1) - opponent.defense;
         const typeEffectiveness = getTypeEffectiveness(move.type, opponent.type);
-        const totalDamage = damage * typeEffectiveness;
-        opponent.hp -= totalDamage;
+        const totalDamage = Math.max(damage * typeEffectiveness, 0);
+        opponent.hp = Math.max(opponent.hp - totalDamage, 0);
         log(`${this.name} used ${move.name} and dealt ${totalDamage} damage to ${opponent.name}!`);
       }
 
@@ -212,10 +213,10 @@
     function enemyTurn() {
       const randomMove = Math.floor(Math.random() * 4);
       const move = opponentMoves[randomMove];
-      const damage = Math.max(opponentPokemon.attack * move.power - playerPokemon.defense, 0);
+      const damage = Math.max(opponentPokemon.attack * move.power, 1) - playerPokemon.defense;
       const typeEffectiveness = getTypeEffectiveness(move.type, playerPokemon.type);
-      const totalDamage = damage * typeEffectiveness;
-      playerPokemon.hp -= totalDamage;
+      const totalDamage = Math.max(damage * typeEffectiveness, 0);
+      playerPokemon.hp = Math.max(playerPokemon.hp - totalDamage, 0);
       log(`${opponentName}'s ${opponentPokemon.name} used ${move.name} and dealt ${totalDamage} damage!`);
       updateUI();
       checkWinner();
