@@ -64,7 +64,7 @@
         const typeEffectiveness = getTypeEffectiveness(move.type, opponent.type);
         const totalDamage = damage * typeEffectiveness;
         opponent.hp -= totalDamage;
-        log(`${this.name} used ${move.name} and dealt ${totalDamage} damage to ${opponent.name}!`);
+        log(`You used ${move.name}! ${this.name} dealt ${totalDamage} damage to ${opponent.name}!`);
       }
 
       defend() {
