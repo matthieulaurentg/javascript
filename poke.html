@@ -55,6 +55,7 @@
   </div>
   <div id="pokemonSelection">
     <h2>Select your Pokemon:</h2>
+    <input type="text" id="playerPokemonNameInput" placeholder="Enter your Pokemon's name">
     <button onclick="selectPokemon(pikachu)">Pikachu</button>
     <button onclick="selectPokemon(bulbasaur)">Bulbasaur</button>
     <button onclick="selectPokemon(charmander)">Charmander</button>
@@ -146,7 +147,9 @@
 
     // Select Pokemon
     function selectPokemon(pokemon) {
-      playerPokemon = pokemon;
+      const playerPokemonNameInput = document.getElementById('playerPokemonNameInput');
+      const playerPokemonName = playerPokemonNameInput.value || pokemon.name;
+      playerPokemon = new Pokemon(playerPokemonName, pokemon.type, pokemon.hp, pokemon.attack, pokemon.defense, pokemon.moves);
       document.getElementById('pokemonSelection').style.display = 'none';
       document.getElementById('playerControls').style.display = 'block';
       document.getElementById('opponentControls').style.display = 'block';
