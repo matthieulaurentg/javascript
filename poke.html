@@ -9,7 +9,8 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #f5f5f5;
+      background-color: #e6e6e6;
+      background-image: linear-gradient(45deg, #f0f0f0, #ffffff);
       color: #333;
     }
     h1, h2, h3 {
@@ -32,7 +33,7 @@
       background-color: #45a049;
     }
     .container {
-      max-width: 300px;
+      max-width: 90%;
       margin: 20px auto;
       padding: 20px;
       background-color: #fff;
@@ -43,8 +44,14 @@
       margin-top: 20px;
     }
     .pokemon-button {
-      width: 100%;
+      width: calc(50% - 15px);
+      margin-right: 10px;
       margin-bottom: 10px;
+    }
+    @media (min-width: 768px) {
+      .pokemon-button {
+        width: calc(33.33% - 15px);
+      }
     }
   </style>
 </head>
@@ -70,16 +77,19 @@
     <div id="pokemonSelection" class="controls">
       <h2>Select your Pokemon:</h2>
       <input type="text" id="playerPokemonNameInput" placeholder="Enter your Pokemon's name">
-      <button class="pokemon-button" onclick="selectPokemon(pikachu)">Pikachu</button>
-      <button class="pokemon-button" onclick="selectPokemon(bulbasaur)">Bulbasaur</button>
-      <button class="pokemon-button" onclick="selectPokemon(charmander)">Charmander</button>
-      <button class="pokemon-button" onclick="selectPokemon(squirtle)">Squirtle</button>
-      <button class="pokemon-button" onclick="selectPokemon(butterfree)">Butterfree</button>
-      <button class="pokemon-button" onclick="selectPokemon(geodude)">Geodude</button>
+      <div>
+        <button class="pokemon-button" onclick="selectPokemon(pikachu)">Pikachu</button>
+        <button class="pokemon-button" onclick="selectPokemon(bulbasaur)">Bulbasaur</button>
+      </div>
+      <div>
+        <button class="pokemon-button" onclick="selectPokemon(charmander)">Charmander</button>
+        <button class="pokemon-button" onclick="selectPokemon(squirtle)">Squirtle</button>
+      </div>
+      <div>
+        <button class="pokemon-button" onclick="selectPokemon(butterfree)">Butterfree</button>
+        <button class="pokemon-button" onclick="selectPokemon(geodude)">Geodude</button>
+      </div>
     </div>
   </div>
-  <script>
-    // JavaScript code remains unchanged
-  </script>
 </body>
 </html>
