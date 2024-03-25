@@ -34,6 +34,15 @@
     <button onclick="selectPokemon(squirtle)">Squirtle</button>
     <button onclick="selectPokemon(butterfree)">Butterfree</button>
     <button onclick="selectPokemon(geodude)">Geodude</button>
+    <button onclick="selectPokemon(onix)">Onix</button>
+    <button onclick="selectPokemon(clefairy)">Clefairy</button>
+    <button onclick="selectPokemon(jigglypuff)">Jigglypuff</button>
+    <button onclick="selectPokemon(zubat)">Zubat</button>
+    <button onclick="selectPokemon(oddish)">Oddish</button>
+    <button onclick="selectPokemon(diglett)">Diglett</button>
+    <button onclick="selectPokemon(meowth)">Meowth</button>
+    <button onclick="selectPokemon(psyduck)">Psyduck</button>
+    <button onclick="selectPokemon(mankey)">Mankey</button>
   </div>
   <div id="typeChart">
     <h2>Type Chart</h2>
@@ -110,6 +119,60 @@
       { name: 'Rock Blast', type: 'Rock', power: 1.4 },
       { name: 'Rollout', type: 'Rock', power: 1.6 }
     ]);
+    const onix = new Pokemon('Onix', 'Rock', 150, 25, 60, [
+      { name: 'Rock Slide', type: 'Rock', power: 1.8 },
+      { name: 'Bind', type: 'Normal', power: 1.2 },
+      { name: 'Iron Head', type: 'Steel', power: 1.6 },
+      { name: 'Stone Edge', type: 'Rock', power: 1.7 }
+    ]);
+    const clefairy = new Pokemon('Clefairy', 'Normal', 100, 45, 30, [
+      { name: 'Moonblast', type: 'Fairy', power: 1.5 },
+      { name: 'Disarming Voice', type: 'Fairy', power: 1.3 },
+      { name: 'Metronome', type: 'Normal', power: 1.1 },
+      { name: 'Cosmic Power', type: 'Psychic', power: 0.9 }
+    ]);
+    const jigglypuff = new Pokemon('Jigglypuff', 'Normal', 115, 35, 25, [
+      { name: 'Hyper Voice', type: 'Normal', power: 1.4 },
+      { name: 'Pound', type: 'Normal', power: 1.1 },
+      { name: 'Body Slam', type: 'Normal', power: 1.3 },
+      { name: 'Double Slap', type: 'Normal', power: 1.2 }
+    ]);
+    const zubat = new Pokemon('Zubat', 'Poison', 80, 45, 20, [
+      { name: 'Poison Fang', type: 'Poison', power: 1.4 },
+      { name: 'Astonish', type: 'Ghost', power: 1.1 },
+      { name: 'Bite', type: 'Dark', power: 1.3 },
+      { name: 'Air Cutter', type: 'Flying', power: 1.2 }
+    ]);
+    const oddish = new Pokemon('Oddish', 'Grass', 90, 35, 25, [
+      { name: 'Absorb', type: 'Grass', power: 1.2 },
+      { name: 'Acid', type: 'Poison', power: 1.1 },
+      { name: 'Stun Spore', type: 'Grass', power: 0.9 },
+      { name: 'Petal Dance', type: 'Grass', power: 1.5 }
+    ]);
+    const diglett = new Pokemon('Diglett', 'Ground', 100, 40, 30, [
+      { name: 'Earthquake', type: 'Ground', power: 1.6 },
+      { name: 'Mud Slap', type: 'Ground', power: 1.2 },
+      { name: 'Scratch', type: 'Normal', power: 1.1 },
+      { name: 'Sucker Punch', type: 'Dark', power: 1.4 }
+    ]);
+    const meowth = new Pokemon('Meowth', 'Normal', 80, 50, 20, [
+      { name: 'Fury Swipes', type: 'Normal', power: 1.2 },
+      { name: 'Scratch', type: 'Normal', power: 1.1 },
+      { name: 'Fake Out', type: 'Normal', power: 1.3 },
+      { name: 'Feint Attack', type: 'Dark', power: 1.4 }
+    ]);
+    const psyduck = new Pokemon('Psyduck', 'Water', 100, 35, 25, [
+      { name: 'Water Pulse', type: 'Water', power: 1.3 },
+      { name: 'Confusion', type: 'Psychic', power: 1.2 },
+      { name: 'Scratch', type: 'Normal', power: 1.1 },
+      { name: 'Zen Headbutt', type: 'Psychic', power: 1.4 }
+    ]);
+    const mankey = new Pokemon('Mankey', 'Fighting', 90, 60, 20, [
+      { name: 'Karate Chop', type: 'Fighting', power: 1.4 },
+      { name: 'Fury Swipes', type: 'Normal', power: 1.2 },
+      { name: 'Low Kick', type: 'Fighting', power: 1.3 },
+      { name: 'Cross Chop', type: 'Fighting', power: 1.6 }
+    ]);
 
     // Initialize battle
     let playerPokemon;
@@ -135,7 +198,16 @@
         { name: 'Brock', pokemon: geodude },
         { name: 'Gary', pokemon: charmander },
         { name: 'Jessie', pokemon: butterfree },
-        { name: 'James', pokemon: bulbasaur }
+        { name: 'James', pokemon: bulbasaur },
+        { name: 'Roark', pokemon: onix },
+        { name: 'Maylene', pokemon: mankey },
+        { name: 'Bugsy', pokemon: butterfree },
+        { name: 'Falkner', pokemon: psyduck },
+        { name: 'Whitney', pokemon: clefairy },
+        { name: 'Morty', pokemon: zubat },
+        { name: 'Jasmine', pokemon: meowth },
+        { name: 'Chuck', pokemon: geodude },
+        { name: 'Pryce', pokemon: oddish }
       ];
       const randomIndex = Math.floor(Math.random() * opponents.length);
       opponentName = opponents[randomIndex].name;
@@ -183,60 +255,4 @@
     function checkWinner() {
       if (playerPokemon.hp <= 0) {
         log(`${opponentName}'s ${opponentPokemon.name} wins!`);
-        disableControls();
-      } else if (opponentPokemon.hp <= 0) {
-        log(`${playerPokemon.name} wins!`);
-        disableControls();
-      }
-    }
-
-    // Logging function
-    function log(message) {
-      const battleLog = document.getElementById('battleLog');
-      const p = document.createElement('p');
-      p.textContent = message;
-      battleLog.appendChild(p);
-    }
-
-    // Update UI
-    function updateUI() {
-      document.getElementById('playerPokemonName').textContent = playerPokemon.name;
-      document.getElementById('playerPokemonHP').textContent = playerPokemon.hp;
-      document.getElementById('playerPokemonAttack').textContent = playerPokemon.attack;
-      document.getElementById('opponentName').textContent = opponentName;
-      document.getElementById('opponentPokemonName').textContent = opponentPokemon.name;
-      document.getElementById('opponentPokemonHP').textContent = opponentPokemon.hp;
-    }
-
-    // Enable/Disable controls
-    function enableControls() {
-      document.querySelectorAll('#playerControls button').forEach(button => {
-        button.disabled = false;
-      });
-    }
-
-    function disableControls() {
-      document.querySelectorAll('#playerControls button').forEach(button => {
-        button.disabled = true;
-      });
-    }
-
-    // Type effectiveness
-    function getTypeEffectiveness(moveType, pokemonType) {
-      const typeChart = {
-        Normal: { Normal: 1, Fire: 1, Water: 1, Grass: 1, Electric: 1, Rock: 1, Ground: 1, Bug: 1, Fighting: 1 },
-        Fire: { Normal: 1, Fire: 0.5, Water: 0.5, Grass: 2, Electric: 1, Rock: 0.5, Ground: 2, Bug: 0.5, Fighting: 1 },
-        Water: { Normal: 1, Fire: 2, Water: 0.5, Grass: 0.5, Electric: 1, Rock: 2, Ground: 1, Bug: 1, Fighting: 1 },
-        Grass: { Normal: 1, Fire: 0.5, Water: 2, Grass: 0.5, Electric: 0.5, Rock: 2, Ground: 0.5, Bug: 0.5, Fighting: 1 },
-        Electric: { Normal: 1, Fire: 1, Water: 2, Grass: 0.5, Electric: 0.5, Rock: 1, Ground: 0, Bug: 1, Fighting: 1 },
-        Rock: { Normal: 0.5, Fire: 2, Water: 2, Grass: 2, Electric: 1, Rock: 1, Ground: 0.5, Bug: 1, Fighting: 0.5 },
-        Ground: { Normal: 1, Fire: 2, Water: 2, Grass: 0.5, Electric: 2, Rock: 0.5, Ground: 1, Bug: 1, Fighting: 1 },
-        Bug: { Normal: 1, Fire: 0.5, Water: 1, Grass: 2, Electric: 1, Rock: 1, Ground: 0.5, Bug: 1, Fighting: 0.5 },
-        Fighting: { Normal: 2, Fire: 1, Water: 1, Grass: 1, Electric: 1, Rock: 2, Ground: 1, Bug: 0.5, Fighting: 1 }
-      };
-
-      return typeChart[moveType][pokemonType];
-    }
-  </script>
-</body>
-</html>
+        disableControls
