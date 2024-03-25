@@ -31,15 +31,20 @@
         y: 0
       },
       speed: 5,
-      jump: -10
+      jump: -12
     };
 
     // Platform variables
     let platforms = [];
-    const platformWidth = 200;
+    const platformWidth = 100;
     const platformHeight = 20;
-    const platformGap = 100;
+    const platformGap = 150;
     const platformCount = 10;
+
+    // Obstacle variables
+    let obstacles = [];
+    const obstacleWidth = 30;
+    const obstacleHeight = 30;
 
     // Start and end variables
     let startPlatform;
@@ -59,9 +64,10 @@
       }
     };
 
-    // Generate random platforms
-    function generatePlatforms() {
+    // Generate random platforms and obstacles
+    function generateLevel() {
       platforms = [];
+      obstacles = [];
       let currentX = 0;
       let currentY = canvas.height - platformHeight;
 
@@ -84,6 +90,16 @@
           width: platformWidth,
           height: platformHeight
         });
+
+        // Generate obstacles on some platforms
+        if (Math.random() < 0.3) {
+          obstacles.push({
+            x: currentX + platformWidth / 2 - obstacleWidth / 2,
+            y: currentY - obstacleHeight,
+            width: obstacleWidth,
+            height: obstacleHeight
+          });
+        }
 
         currentX += platformWidth + Math.random() * platformGap;
         currentY -= Math.random() * 100 + 50;
@@ -121,6 +137,20 @@
         }
       });
 
+      // Check for collision with obstacles
+      obstacles.forEach(obstacle => {
+        if (
+          player.x < obstacle.x + obstacle.width &&
+          player.x + player.width > obstacle.x &&
+          player.y + player.height > obstacle.y &&
+          player.y < obstacle.y + obstacle.height
+        ) {
+          // Reset player position to start platform
+          player.x = startPlatform.x;
+          player.y = startPlatform.y - player.height;
+        }
+      });
+
       // Check if player reaches the end platform
       if (
         player.x < endPlatform.x + endPlatform.width &&
@@ -128,9 +158,9 @@
         player.y + player.height > endPlatform.y &&
         player.y < endPlatform.y + endPlatform.height
       ) {
-        // Increment level and generate new platforms
+        // Increment level and generate new level
         level++;
-        generatePlatforms();
+        generateLevel();
         player.x = startPlatform.x;
         player.y = startPlatform.y - player.height;
       }
@@ -147,12 +177,18 @@
         ctx.fillRect(platform.x - camera.x, platform.y - camera.y, platform.width, platform.height);
       });
 
+      // Draw obstacles
+      ctx.fillStyle = 'red';
+      obstacles.forEach(obstacle => {
+        ctx.fillRect(obstacle.x - camera.x, obstacle.y - camera.y, obstacle.width, obstacle.height);
+      });
+
       // Draw start platform
       ctx.fillStyle = 'orange';
       ctx.fillRect(startPlatform.x - camera.x, startPlatform.y - camera.y, startPlatform.width, startPlatform.height);
 
       // Draw end platform
-      ctx.fillStyle = 'red';
+      ctx.fillStyle = 'purple';
       ctx.fillRect(endPlatform.x - camera.x, endPlatform.y - camera.y, endPlatform.width, endPlatform.height);
 
       // Draw player
@@ -187,8 +223,8 @@
       }
     });
 
-    // Generate initial platforms
-    generatePlatforms();
+    // Generate initial level
+    generateLevel();
 
     // Start the game loop
     gameLoop = requestAnimationFrame(update);
