@@ -1,102 +1,137 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fancy Tic Tac Toe</title>
-<style>
-    body {
-        font-family: Arial, sans-serif; /* Just like how you have your favorite crayon, this sets the font style for the whole game. */
-        display: flex;
-        justify-content: center; /* Think of this as telling the computer to put everything in the center of the page, like your toys on your bed. */
-        align-items: center; /* This is like asking the computer to align your Legos perfectly, just like you do. */
-        height: 100vh;
-        margin: 0;
-        background-color: #f0f0f6; /* This sets the background color of your playground. What color do you like? */
-    }
+import math
 
-    #tic-tac-toe {
-        display: grid; /* Imagine a grid like the one you draw on your paper, but this one is for the game. */
-        grid-template-columns: repeat(3, 100px); /* It divides the grid into 3 equal parts, just like cutting a pizza into slices. */
-        grid-gap: 5px; /* This adds some space between the slices of pizza, uh, I mean, between the cells. */
-        background-color: #333; /* This sets the color of the cells, like painting the squares of a game board. */
-        padding: 5px; /* Imagine adding a little cushion around the game board so the pieces don't bump into each other. */
-        border-radius: 5px; /* This makes the edges of the game board look smoother, like a rounded toy block. */
-    }
+class TicTacToe:
+    def __init__(self):
+        self.board = [' ' for _ in range(9)]
+        self.current_winner = None
 
-    .cell {
-        width: 100px;
-        height: 100px; /* This sets the size of each cell in the game board, just like the size of your toy cars. */
-        background-color: #ccc; /* Each cell gets painted with this color when it's not clicked, like a blank canvas waiting for your masterpiece. */
-        display: flex;
-        justify-content: center;
-        align-items: center; /* This centers the X's and O's inside each cell, just like you line up your toys. */
-        font-size: 2em; /* This sets the size of the X's and O's. How big do you want them? */
-        cursor: pointer; /* This changes the cursor to a pointing finger when you hover over a cell, like magic! */
-        transition: background-color 0.3s ease; /* This makes the cell change color smoothly when you hover over it, like a color-changing toy. */
-    }
+    def print_board(self):
+        for row in [self.board[i*3:(i+1)*3] for i in range(3)]:
+            print('| ' + ' | '.join(row) + ' |')
 
-    .cell:hover {
-        background-color: #ddd; /* When you hover over a cell, it changes to this color, like a magic trick! */
-    }
-</style>
-</head>
-<body>
-<div id="tic-tac-toe"></div>
-<script>
-    const ticTacToe = document.getElementById('tic-tac-toe'); // This is like telling the computer to find your toy box and put it here.
-    const cells = []; // We're creating a special place to store all the cells in the game. Think of it as your secret hiding spot for treasures.
+    @staticmethod
+    def print_board_nums():
+        number_board = [[str(i) for i in range(j*3, (j+1)*3)] for j in range(3)]
+        for row in number_board:
+            print('| ' + ' | '.join(row) + ' |')
 
-    let currentPlayer = 'X'; // At the beginning of the game, X gets to play first. X marks the spot, right?
-    let winner = null; // No one has won the game yet. It's like a mystery waiting to be solved!
+    def available_moves(self):
+        return [i for i, spot in enumerate(self.board) if spot == ' ']
 
-    // Let's create the game board!
-    for (let i = 0; i < 9; i++) { // This loop helps us create 9 cells for the game, like planting seeds in a garden.
-        const cell = document.createElement('div'); // Each cell is like a little house for X or O.
-        cell.classList.add('cell'); // We're giving each cell a special tag so we can find them later.
-        cell.dataset.index = i; // Each cell gets its own special number, like your favorite toy has its own number in the toy store.
-        cell.addEventListener('click', handleCellClick); // When you click on a cell, something fun will happen!
-        ticTacToe.appendChild(cell); // Let's put each cell on the game board.
-        cells.push(cell); // We're keeping track of each cell so we know which ones are empty or filled with X's and O's.
-    }
+    def empty_squares(self):
+        return ' ' in self.board
 
-    function handleCellClick() { // When you click on a cell, this is what happens.
-        if (winner) return; // If someone has already won the game, we can't play anymore. It's like trying to eat dessert before dinner!
-        if (this.textContent !== '') return; // If someone has already played in this cell, we can't play here again. No cheating allowed!
+    def num_empty_squares(self):
+        return self.board.count(' ')
 
-        this.textContent = currentPlayer; // This puts either X or O in the cell you clicked on.
+    def make_move(self, square, letter):
+        if self.board[square] == ' ':
+            self.board[square] = letter
+            if self.winner(square, letter):
+                self.current_winner = letter
+            return True
+        return False
 
-        if (checkWinner()) { // Let's see if someone has won the game!
-            winner = currentPlayer; // We found the winner! Who could it be?
-            alert(`${winner} wins! 🎉`); // Hooray! We found the winner and we're celebrating with confetti!
-        } else if (checkDraw()) { // Uh-oh, the game is tied!
-            alert("It's a draw! 😕"); // Nobody won, but that's okay. We'll try again and someone will win next time!
-        } else { // Nobody won yet? Then it's the next player's turn!
-            currentPlayer = currentPlayer === 'X' ? 'O' : 'X'; // It's like passing the baton in a relay race. Now it's the other player's turn!
-        }
-    }
+    def winner(self, square, letter):
+        # check the row
+        row_ind = square // 3
+        row = self.board[row_ind*3:(row_ind+1)*3]
+        if all([spot == letter for spot in row]):
+            return True
+        # check the column
+        col_ind = square % 3
+        column = [self.board[col_ind+i*3] for i in range(3)]
+        if all([spot == letter for spot in column]):
+            return True
+        # check diagonals
+        if square % 2 == 0:
+            diagonal1 = [self.board[i] for i in [0, 4, 8]]
+            if all([spot == letter for spot in diagonal1]):
+                return True
+            diagonal2 = [self.board[i] for i in [2, 4, 6]]
+            if all([spot == letter for spot in diagonal2]):
+                return True
+        return False
 
-    function checkWinner() { // Let's see if someone has won the game!
-        const winningCombos = [ // These are all the possible ways to win the game. It's like having a treasure map with all the hidden treasures marked on it.
-            [0, 1, 2],
-            [3, 4, 5],
-            [6, 7, 8],
-            [0, 3, 6],
-            [1, 4, 7],
-            [2, 5, 8],
-            [0, 4, 8],
-            [2, 4, 6]
-        ];
+def minimax(game, maximizing_player, alpha, beta):
+    if game.current_winner is not None:
+        if game.current_winner == 'X':
+            return -1
+        else:
+            return 1
+    elif not game.empty_squares():
+        return 0
 
-        return winningCombos.some(combo => { // Let's check each winning combination.
-            const [a, b, c] = combo; // These are the three cells in a winning combination.
-            return cells[a].textContent && cells[a].textContent === cells[b].textContent && cells[a].textContent === cells[c].textContent; // If all three cells have the same X or O, then someone has won!
-        });
-    }
+    if maximizing_player:
+        max_eval = -math.inf
+        for move in game.available_moves():
+            game.make_move(move, 'O')
+            eval = minimax(game, False, alpha, beta)
+            game.board[move] = ' '
+            max_eval = max(max_eval, eval)
+            alpha = max(alpha, eval)
+            if beta <= alpha:
+                break
+        return max_eval
+    else:
+        min_eval = math.inf
+        for move in game.available_moves():
+            game.make_move(move, 'X')
+            eval = minimax(game, True, alpha, beta)
+            game.board[move] = ' '
+            min_eval = min(min_eval, eval)
+            beta = min(beta, eval)
+            if beta <= alpha:
+                break
+        return min_eval
 
-    function checkDraw() { // Let's see if the game is tied!
-        return cells.every(cell => cell.textContent !== ''); // If all the cells are filled with X's and O's but nobody won, then it's a tie!
-    }
-</script>
-</body>
-</html>
+def get_best_move(game):
+    best_move = -1
+    best_eval = -math.inf
+    alpha = -math.inf
+    beta = math.inf
+    for move in game.available_moves():
+        game.make_move(move, 'O')
+        eval = minimax(game, False, alpha, beta)
+        game.board[move] = ' '
+        if eval > best_eval:
+            best_eval = eval
+            best_move = move
+            alpha = max(alpha, eval)
+    return best_move
+
+def play():
+    game = TicTacToe()
+    print("Welcome to Tic Tac Toe!")
+    game.print_board_nums()
+    print("To play, enter the number corresponding to the position where you want to place your X.")
+    print()
+
+    while game.empty_squares():
+        if game.current_winner is None:
+            human_move = None
+            while human_move not in range(9):
+                try:
+                    human_move = int(input("Enter your move (0-8): "))
+                    if human_move not in game.available_moves():
+                        raise ValueError
+                except ValueError:
+                    print("Invalid move. Please try again.")
+            game.make_move(human_move, 'X')
+
+        if game.current_winner is None and game.empty_squares():
+            ai_move = get_best_move(game)
+            game.make_move(ai_move, 'O')
+            print(f"AI placed an 'O' in position {ai_move}")
+            print()
+            game.print_board()
+
+        if game.current_winner:
+            print(f"{game.current_winner} wins!")
+            break
+        elif not game.empty_squares():
+            print("It's a draw!")
+            break
+
+if __name__ == "__main__":
+    play()
