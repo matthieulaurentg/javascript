@@ -34,11 +34,30 @@
     };
 
     // Platform variables
-    const platforms = [
-      { x: 0, y: 350, width: 200, height: 50 },
-      { x: 300, y: 250, width: 200, height: 50 },
-      { x: 600, y: 150, width: 200, height: 50 }
-    ];
+    let platforms = [];
+    const platformWidth = 200;
+    const platformHeight = 20;
+    const platformGap = 100;
+    const platformCount = 5;
+
+    // Generate random platforms
+    function generatePlatforms() {
+      platforms = [];
+      let currentX = 0;
+      let currentY = canvas.height - platformHeight;
+
+      for (let i = 0; i < platformCount; i++) {
+        platforms.push({
+          x: currentX,
+          y: currentY,
+          width: platformWidth,
+          height: platformHeight
+        });
+
+        currentX += platformWidth + Math.random() * platformGap;
+        currentY -= Math.random() * 100 + 50;
+      }
+    }
 
     // Game loop
     function update() {
@@ -97,6 +116,9 @@
         player.velocity.x = 0;
       }
     });
+
+    // Generate initial platforms
+    generatePlatforms();
 
     // Start the game loop
     gameLoop = requestAnimationFrame(update);
