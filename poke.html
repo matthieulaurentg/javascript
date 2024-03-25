@@ -209,7 +209,10 @@
     function enemyTurn() {
       const randomMove = Math.floor(Math.random() * 4);
       const move = opponentMoves[randomMove];
-      opponentPokemon.useMove(move, playerPokemon);
+      const damage = Math.max(opponentPokemon.attack * move.power - playerPokemon.defense, 0);
+      const typeEffectiveness = getTypeEffectiveness(move.type, playerPokemon.type);
+      const totalDamage = damage * typeEffectiveness;
+      playerPokemon.hp -= totalDamage;
       log(`${opponentName}'s ${opponentPokemon.name} used ${move.name} and dealt ${totalDamage} damage!`);
       updateUI();
       checkWinner();
