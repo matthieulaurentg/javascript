@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>JavaScript Platformer</title>
+  <style>
+    canvas {
+      border: 1px solid black;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="gameCanvas" width="800" height="400"></canvas>
+
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // Game variables
+    let gameLoop;
+    const gravity = 0.5;
+
+    // Player variables
+    const player = {
+      x: 50,
+      y: 200,
+      width: 30,
+      height: 50,
+      velocity: {
+        x: 0,
+        y: 0
+      },
+      jump: -10
+    };
+
+    // Platform variables
+    const platforms = [
+      { x: 0, y: 350, width: 200, height: 50 },
+      { x: 300, y: 250, width: 200, height: 50 },
+      { x: 600, y: 150, width: 200, height: 50 }
+    ];
+
+    // Game loop
+    function update() {
+      // Apply gravity to player's velocity
+      player.velocity.y += gravity;
+
+      // Update player's position based on velocity
+      player.x += player.velocity.x;
+      player.y += player.velocity.y;
+
+      // Check for collision with platforms
+      platforms.forEach(platform => {
+        if (
+          player.x < platform.x + platform.width &&
+          player.x + player.width > platform.x &&
+          player.y + player.height > platform.y &&
+          player.y < platform.y + platform.height
+        ) {
+          player.velocity.y = 0;
+          player.y = platform.y - player.height;
+        }
+      });
+
+      // Clear canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw player
+      ctx.fillStyle = 'blue';
+      ctx.fillRect(player.x, player.y, player.width, player.height);
+
+      // Draw platforms
+      ctx.fillStyle = 'green';
+      platforms.forEach(platform => {
+        ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
+      });
+
+      // Request next animation frame
+      gameLoop = requestAnimationFrame(update);
+    }
+
+    // Handle user input
+    document.addEventListener('keydown', event => {
+      if (event.code === 'Space') {
+        player.velocity.y = player.jump;
+      }
+    });
+
+    // Start the game loop
+    gameLoop = requestAnimationFrame(update);
+  </script>
+</body>
+</html>
