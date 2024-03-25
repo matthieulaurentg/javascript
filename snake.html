@@ -2,20 +2,26 @@
 <html>
 <head>
   <title>Snake Game</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     canvas {
+      display: block;
+      margin: 0 auto;
       border: 1px solid black;
     }
   </style>
 </head>
 <body>
-  <canvas id="game" width="400" height="400"></canvas>
+  <canvas id="game"></canvas>
   <script>
     const canvas = document.getElementById('game');
     const ctx = canvas.getContext('2d');
     const scale = 20;
-    const rows = canvas.height / scale;
-    const columns = canvas.width / scale;
+    const rows = Math.floor(window.innerHeight / scale) - 1;
+    const columns = Math.floor(window.innerWidth / scale) - 1;
+
+    canvas.width = columns * scale;
+    canvas.height = rows * scale;
 
     let snake = [];
     snake[0] = {
@@ -67,19 +73,19 @@
       const UP_KEY = 38;
       const DOWN_KEY = 40;
 
-      if (event.keyCode === LEFT_KEY) {
+      if (event.keyCode === LEFT_KEY && dx !== 1) {
         dx = -1;
         dy = 0;
       }
-      if (event.keyCode === RIGHT_KEY) {
+      if (event.keyCode === RIGHT_KEY && dx !== -1) {
         dx = 1;
         dy = 0;
       }
-      if (event.keyCode === UP_KEY) {
+      if (event.keyCode === UP_KEY && dy !== 1) {
         dx = 0;
         dy = -1;
       }
-      if (event.keyCode === DOWN_KEY) {
+      if (event.keyCode === DOWN_KEY && dy !== -1) {
         dx = 0;
         dy = 1;
       }
