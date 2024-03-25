@@ -66,16 +66,11 @@
     ];
 
     let currentShape = Math.floor(Math.random() * shapes.length);
-    console.log('Current Shape:', currentShape);
     let currentRotation = 0;
-    console.log('Current Rotation:', currentRotation);
     let currentX = Math.floor(columns / 2) - 1;
-    console.log('Current X:', currentX);
     let currentY = 0;
-    console.log('Current Y:', currentY);
 
     function drawShape() {
-      console.log('Drawing Shape');
       for (let row = 0; row < shapes[currentShape][currentRotation].length; row++) {
         for (let col = 0; col < shapes[currentShape][currentRotation][row].length; col++) {
           if (shapes[currentShape][currentRotation][row][col]) {
@@ -89,7 +84,6 @@
     }
 
     function drawBoard() {
-      console.log('Drawing Board');
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       for (let row = 0; row < board.length; row++) {
         for (let col = 0; col < board[row].length; col++) {
@@ -104,51 +98,35 @@
 
     function moveDown() {
       const nextY = currentY + 1;
-      console.log('Trying to move down to Y:', nextY);
       if (isValidMove(currentX, nextY, currentRotation)) {
         currentY = nextY;
-        console.log('Move down successful');
         return true;
       }
-      console.log('Move down failed');
       return false;
     }
 
     function moveLeft() {
       const nextX = currentX - 1;
-      console.log('Trying to move left to X:', nextX);
       if (isValidMove(nextX, currentY, currentRotation)) {
         currentX = nextX;
-        console.log('Move left successful');
-      } else {
-        console.log('Move left failed');
       }
     }
 
     function moveRight() {
       const nextX = currentX + 1;
-      console.log('Trying to move right to X:', nextX);
       if (isValidMove(nextX, currentY, currentRotation)) {
         currentX = nextX;
-        console.log('Move right successful');
-      } else {
-        console.log('Move right failed');
       }
     }
 
     function rotate() {
       const nextRotation = (currentRotation + 1) % shapes[currentShape].length;
-      console.log('Trying to rotate to rotation:', nextRotation);
       if (isValidMove(currentX, currentY, nextRotation)) {
         currentRotation = nextRotation;
-        console.log('Rotation successful');
-      } else {
-        console.log('Rotation failed');
       }
     }
 
     function isValidMove(x, y, rotation) {
-      console.log('Checking valid move at X:', x, 'Y:', y, 'Rotation:', rotation);
       for (let row = 0; row < shapes[currentShape][rotation].length; row++) {
         for (let col = 0; col < shapes[currentShape][rotation][row].length; col++) {
           if (shapes[currentShape][rotation][row][col]) {
@@ -160,20 +138,80 @@
               newY >= rows ||
               (newY >= 0 && board[newY][newX])
             ) {
-              console.log('Invalid move detected');
               return false;
             }
           }
         }
       }
-      console.log('Valid move');
       return true;
     }
 
-    // ... rest of the code ...
+    // Game Loop
+    function gameLoop() {
+      if (!moveDown()) {
+        placeShape();
+        checkLines();
+        if (!gameOver()) {
+          newShape();
+        }
+      }
+      drawBoard();
+      setTimeout(gameLoop, 1000); // Adjust speed here
+    }
 
-    resetGame();
-    gameLoop();
-  </script>
-</body>
-</html>
+    function placeShape() {
+      for (let row = 0; row < shapes[currentShape][currentRotation].length; row++) {
+        for (let col = 0; col < shapes[currentShape][currentRotation][row].length; col++) {
+          if (shapes[currentShape][currentRotation][row][col]) {
+            const x = currentX + col;
+            const y = currentY + row;
+            board[y][x] = shapes[currentShape][currentRotation][row][col];
+          }
+        }
+      }
+    }
+
+    function checkLines() {
+      for (let row = rows - 1; row >= 0; row--) {
+        let isLineFull = true;
+        for (let col = 0; col < columns; col++) {
+          if (board[row][col] === 0) {
+            isLineFull = false;
+            break;
+          }
+        }
+        if (isLineFull) {
+          clearLine(row);
+          moveLinesDown(row);
+          row++; // Recheck the same row as it has been moved down
+        }
+      }
+    }
+
+    function clearLine(row) {
+      for (let i = 0; i < columns; i++) {
+        board[row][i] = 0;
+      }
+    }
+
+    function moveLinesDown(row) {
+      for (let i = row; i > 0; i--) {
+        for (let j = 0; j < columns; j++) {
+          board[i] = board[i - 1];
+        }
+      }
+    }
+
+    function gameOver() {
+      for (let i = 0; i < columns; i++) {
+        if (board[0][i]) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    function newShape() {
+      currentShape = Math.floor(Math.random() * shapes.length);
+      currentRotation = 0;
+      currentX
