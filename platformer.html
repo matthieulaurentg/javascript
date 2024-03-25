@@ -29,6 +29,7 @@
         x: 0,
         y: 0
       },
+      speed: 5,
       jump: -10
     };
 
@@ -82,6 +83,18 @@
     document.addEventListener('keydown', event => {
       if (event.code === 'Space') {
         player.velocity.y = player.jump;
+      }
+      if (event.code === 'ArrowLeft') {
+        player.velocity.x = -player.speed;
+      }
+      if (event.code === 'ArrowRight') {
+        player.velocity.x = player.speed;
+      }
+    });
+
+    document.addEventListener('keyup', event => {
+      if (event.code === 'ArrowLeft' || event.code === 'ArrowRight') {
+        player.velocity.x = 0;
       }
     });
 
