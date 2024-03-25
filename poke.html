@@ -7,6 +7,33 @@
       display: block;
       margin-bottom: 5px;
     }
+    #battleLog {
+      background-color: #f5f5f5;
+      padding: 10px;
+      border: 1px solid #ccc;
+      height: 200px;
+      overflow-y: scroll;
+    }
+    #playerControls {
+      background-color: #d9f2e6;
+      padding: 10px;
+      border: 1px solid #4caf50;
+    }
+    #opponentControls {
+      background-color: #ffcdd2;
+      padding: 10px;
+      border: 1px solid #e53935;
+    }
+    #pokemonSelection {
+      background-color: #e3f2fd;
+      padding: 10px;
+      border: 1px solid #2196f3;
+    }
+    #typeChart {
+      background-color: #ffe0b2;
+      padding: 10px;
+      border: 1px solid #ff9800;
+    }
   </style>
 </head>
 <body>
@@ -184,10 +211,10 @@
 
     function checkWinner() {
       if (playerPokemon.hp <= 0) {
-        log(`${opponentName}'s ${opponentPokemon.name} wins!`);
+        log(`<span style="color: red;">${opponentName}'s ${opponentPokemon.name} wins!</span>`);
         disableControls();
       } else if (opponentPokemon.hp <= 0) {
-        log(`${playerPokemon.name} wins!`);
+        log(`<span style="color: green;">${playerPokemon.name} wins!</span>`);
         disableControls();
       }
     }
@@ -196,7 +223,7 @@
     function log(message) {
       const battleLog = document.getElementById('battleLog');
       const p = document.createElement('p');
-      p.textContent = message;
+      p.innerHTML = message;
       battleLog.appendChild(p);
     }
 
