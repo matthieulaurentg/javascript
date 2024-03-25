@@ -39,11 +39,25 @@
     const platformWidth = 200;
     const platformHeight = 20;
     const platformGap = 100;
-    const platformCount = 5;
+    const platformCount = 10;
 
     // Start and end variables
     let startPlatform;
     let endPlatform;
+
+    // Camera variables
+    const camera = {
+      x: 0,
+      y: 0,
+      width: canvas.width,
+      height: canvas.height,
+      followPlayer: function() {
+        this.x = player.x - (this.width / 2) + (player.width / 2);
+        if (this.x < 0) {
+          this.x = 0;
+        }
+      }
+    };
 
     // Generate random platforms
     function generatePlatforms() {
@@ -121,26 +135,29 @@
         player.y = startPlatform.y - player.height;
       }
 
+      // Update camera position
+      camera.followPlayer();
+
       // Clear canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // Draw player
-      ctx.fillStyle = 'blue';
-      ctx.fillRect(player.x, player.y, player.width, player.height);
 
       // Draw platforms
       ctx.fillStyle = 'green';
       platforms.forEach(platform => {
-        ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
+        ctx.fillRect(platform.x - camera.x, platform.y - camera.y, platform.width, platform.height);
       });
 
       // Draw start platform
       ctx.fillStyle = 'orange';
-      ctx.fillRect(startPlatform.x, startPlatform.y, startPlatform.width, startPlatform.height);
+      ctx.fillRect(startPlatform.x - camera.x, startPlatform.y - camera.y, startPlatform.width, startPlatform.height);
 
       // Draw end platform
       ctx.fillStyle = 'red';
-      ctx.fillRect(endPlatform.x, endPlatform.y, endPlatform.width, endPlatform.height);
+      ctx.fillRect(endPlatform.x - camera.x, endPlatform.y - camera.y, endPlatform.width, endPlatform.height);
+
+      // Draw player
+      ctx.fillStyle = 'blue';
+      ctx.fillRect(player.x - camera.x, player.y - camera.y, player.width, player.height);
 
       // Draw level text
       ctx.fillStyle = 'black';
