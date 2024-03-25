@@ -18,6 +18,7 @@
     // Game variables
     let gameLoop;
     const gravity = 0.5;
+    let level = 1;
 
     // Player variables
     const player = {
@@ -40,13 +41,29 @@
     const platformGap = 100;
     const platformCount = 5;
 
+    // Start and end variables
+    let startPlatform;
+    let endPlatform;
+
     // Generate random platforms
     function generatePlatforms() {
       platforms = [];
       let currentX = 0;
       let currentY = canvas.height - platformHeight;
 
-      for (let i = 0; i < platformCount; i++) {
+      // Create start platform
+      startPlatform = {
+        x: currentX,
+        y: currentY,
+        width: platformWidth,
+        height: platformHeight
+      };
+      platforms.push(startPlatform);
+
+      currentX += platformWidth + Math.random() * platformGap;
+      currentY -= Math.random() * 100 + 50;
+
+      for (let i = 0; i < platformCount - 2; i++) {
         platforms.push({
           x: currentX,
           y: currentY,
@@ -57,6 +74,15 @@
         currentX += platformWidth + Math.random() * platformGap;
         currentY -= Math.random() * 100 + 50;
       }
+
+      // Create end platform
+      endPlatform = {
+        x: currentX,
+        y: currentY,
+        width: platformWidth,
+        height: platformHeight
+      };
+      platforms.push(endPlatform);
     }
 
     // Game loop
@@ -81,6 +107,20 @@
         }
       });
 
+      // Check if player reaches the end platform
+      if (
+        player.x < endPlatform.x + endPlatform.width &&
+        player.x + player.width > endPlatform.x &&
+        player.y + player.height > endPlatform.y &&
+        player.y < endPlatform.y + endPlatform.height
+      ) {
+        // Increment level and generate new platforms
+        level++;
+        generatePlatforms();
+        player.x = startPlatform.x;
+        player.y = startPlatform.y - player.height;
+      }
+
       // Clear canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -93,6 +133,19 @@
       platforms.forEach(platform => {
         ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
       });
+
+      // Draw start platform
+      ctx.fillStyle = 'orange';
+      ctx.fillRect(startPlatform.x, startPlatform.y, startPlatform.width, startPlatform.height);
+
+      // Draw end platform
+      ctx.fillStyle = 'red';
+      ctx.fillRect(endPlatform.x, endPlatform.y, endPlatform.width, endPlatform.height);
+
+      // Draw level text
+      ctx.fillStyle = 'black';
+      ctx.font = '24px Arial';
+      ctx.fillText(`Level: ${level}`, 10, 30);
 
       // Request next animation frame
       gameLoop = requestAnimationFrame(update);
