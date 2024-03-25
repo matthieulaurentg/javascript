@@ -1,7 +1,7 @@
-<!DOCTYPE html>
+\<!DOCTYPE html>
 <html>
 <head>
-  <title>Pokemon Battle Simulator</title>
+  <title>Little Pocket Monster Battle Simulator</title>
   <style>
     button {
       display: block;
@@ -10,10 +10,10 @@
   </style>
 </head>
 <body>
-  <h1>Pokemon Battle Simulator</h1>
+  <h1>Little Pocket Monster Battle Simulator</h1>
   <div id="battleLog"></div>
   <div id="playerControls">
-    <h2>Your Pokemon: <span id="playerPokemonName"></span></h2>
+    <h2>Your Little Pocket Monster: <span id="playerPokemonName"></span></h2>
     <p>HP: <span id="playerPokemonHP"></span></p>
     <p>Attack: <span id="playerPokemonAttack"></span></p>
     <button onclick="move1()">Move 1</button>
@@ -23,17 +23,157 @@
   </div>
   <div id="opponentControls">
     <h2>Opponent: <span id="opponentName"></span></h2>
-    <h3>Their Pokemon: <span id="opponentPokemonName"></span></h3>
+    <h3>Their Little Pocket Monster: <span id="opponentPokemonName"></span></h3>
     <p>HP: <span id="opponentPokemonHP"></span></p>
   </div>
-  <div id="pokemonSelection">
-    <h2>Select your Pokemon:</h2>
+  <div id="pocketMonsterSelection">
+    <h2>Select your Little Pocket Monster:</h2>
+    <button onclick="selectPokemon(thunderRat)">Thunder Rat</button>
+    <button onclick="selectPokemon(plantSeed)">Plant Seed</button>
+    <button onclick="selectPokemon(flameTail)">Flame Tail</button>
+    <button onclick="selectPokemon(waterTurtle)">Water Turtle</button>
+    <button onclick="selectPokemon(butterflee)">Butterflee</button>
+    <button onclick="selectPokemon(rockBoulder)">Rock Boulder</button>
+    <button onclick="selectPokemon(caterpie)">Caterpie</button>
+    <button onclick="selectPokemon(beedrill)">Beedrill</button>
+    <button onclick="selectPokemon(weedle)">Weedle</button>
+    <button onclick="selectPokemon(kakuna)">Kakuna</button>
+    <button onclick="selectPokemon(pidgey)">Pidgey</button>
+    <button onclick="selectPokemon(pidgeotto)">Pidgeotto</button>
+    <button onclick="selectPokemon(pidgeot)">Pidgeot</button>
+    <button onclick="selectPokemon(rattata)">Rattata</button>
+    <button onclick="selectPokemon(raticate)">Raticate</button>
+    <button onclick="selectPokemon(spearow)">Spearow</button>
+    <button onclick="selectPokemon(fearow)">Fearow</button>
+    <button onclick="selectPokemon(ekans)">Ekans</button>
+    <button onclick="selectPokemon(arbok)">Arbok</button>
     <button onclick="selectPokemon(pikachu)">Pikachu</button>
-    <button onclick="selectPokemon(bulbasaur)">Bulbasaur</button>
-    <button onclick="selectPokemon(charmander)">Charmander</button>
-    <button onclick="selectPokemon(squirtle)">Squirtle</button>
-    <button onclick="selectPokemon(butterfree)">Butterfree</button>
+    <button onclick="selectPokemon(raichu)">Raichu</button>
+    <button onclick="selectPokemon(sandshrew)">Sandshrew</button>
+    <button onclick="selectPokemon(sandslash)">Sandslash</button>
+    <button onclick="selectPokemon(nidoranF)">Nidoran F</button>
+    <button onclick="selectPokemon(nidorina)">Nidorina</button>
+    <button onclick="selectPokemon(nidoqueen)">Nidoqueen</button>
+    <button onclick="selectPokemon(nidoranM)">Nidoran M</button>
+    <button onclick="selectPokemon(nidorino)">Nidorino</button>
+    <button onclick="selectPokemon(nidoking)">Nidoking</button>
+    <button onclick="selectPokemon(clefairy)">Clefairy</button>
+    <button onclick="selectPokemon(clefable)">Clefable</button>
+    <button onclick="selectPokemon(vulpix)">Vulpix</button>
+    <button onclick="selectPokemon(ninetales)">Ninetales</button>
+    <button onclick="selectPokemon(jigglypuff)">Jigglypuff</button>
+    <button onclick="selectPokemon(wigglytuff)">Wigglytuff</button>
+    <button onclick="selectPokemon(zubat)">Zubat</button>
+    <button onclick="selectPokemon(golbat)">Golbat</button>
+    <button onclick="selectPokemon(oddish)">Oddish</button>
+    <button onclick="selectPokemon(gloom)">Gloom</button>
+    <button onclick="selectPokemon(vileplume)">Vileplume</button>
+    <button onclick="selectPokemon(paras)">Paras</button>
+    <button onclick="selectPokemon(parasect)">Parasect</button>
+    <button onclick="selectPokemon(venonat)">Venonat</button>
+    <button onclick="selectPokemon(venomoth)">Venomoth</button>
+    <button onclick="selectPokemon(diglett)">Diglett</button>
+    <button onclick="selectPokemon(dugtrio)">Dugtrio</button>
+    <button onclick="selectPokemon(meowth)">Meowth</button>
+    <button onclick="selectPokemon(persian)">Persian</button>
+    <button onclick="selectPokemon(psyduck)">Psyduck</button>
+    <button onclick="selectPokemon(golduck)">Golduck</button>
+    <button onclick="selectPokemon(mankey)">Mankey</button>
+    <button onclick="selectPokemon(primeape)">Primeape</button>
+    <button onclick="selectPokemon(growlithe)">Growlithe</button>
+    <button onclick="selectPokemon(arcanine)">Arcanine</button>
+    <button onclick="selectPokemon(poliwag)">Poliwag</button>
+    <button onclick="selectPokemon(poliwhirl)">Poliwhirl</button>
+    <button onclick="selectPokemon(poliwrath)">Poliwrath</button>
+    <button onclick="selectPokemon(abra)">Abra</button>
+    <button onclick="selectPokemon(kadabra)">Kadabra</button>
+    <button onclick="selectPokemon(alakazam)">Alakazam</button>
+    <button onclick="selectPokemon(machop)">Machop</button>
+    <button onclick="selectPokemon(machoke)">Machoke</button>
+    <button onclick="selectPokemon(machamp)">Machamp</button>
+    <button onclick="selectPokemon(bellsprout)">Bellsprout</button>
+    <button onclick="selectPokemon(weepinbell)">Weepinbell</button>
+    <button onclick="selectPokemon(victreebel)">Victreebel</button>
+    <button onclick="selectPokemon(tentacool)">Tentacool</button>
+    <button onclick="selectPokemon(tentacruel)">Tentacruel</button>
     <button onclick="selectPokemon(geodude)">Geodude</button>
+    <button onclick="selectPokemon(graveler)">Graveler</button>
+    <button onclick="selectPokemon(golem)">Golem</button>
+    <button onclick="selectPokemon(ponyta)">Ponyta</button>
+    <button onclick="selectPokemon(rapidash)">Rapidash</button>
+    <button onclick="selectPokemon(slowpoke)">Slowpoke</button>
+    <button onclick="selectPokemon(slowbro)">Slowbro</button>
+    <button onclick="selectPokemon(magnemite)">Magnemite</button>
+    <button onclick="selectPokemon(magneton)">Magneton</button>
+    <button onclick="selectPokemon(farfetchd)">Farfetch'd</button>
+    <button onclick="selectPokemon(doduo)">Doduo</button>
+    <button onclick="selectPokemon(dodrio)">Dodrio</button>
+    <button onclick="selectPokemon(seel)">Seel</button>
+    <button onclick="selectPokemon(dewgong)">Dewgong</button>
+    <button onclick="selectPokemon(grimer)">Grimer</button>
+    <button onclick="selectPokemon(muk)">Muk</button>
+    <button onclick="selectPokemon(shellder)">Shellder</button>
+    <button onclick="selectPokemon(cloyster)">Cloyster</button>
+    <button onclick="selectPokemon(gastly)">Gastly</button>
+    <button onclick="selectPokemon(haunter)">Haunter</button>
+    <button onclick="selectPokemon(gengar)">Gengar</button>
+    <button onclick="selectPokemon(onix)">Onix</button>
+    <button onclick="selectPokemon(drowzee)">Drowzee</button>
+    <button onclick="selectPokemon(hypno)">Hypno</button>
+    <button onclick="selectPokemon(krabby)">Krabby</button>
+    <button onclick="selectPokemon(kingler)">Kingler</button>
+    <button onclick="selectPokemon(voltorb)">Voltorb</button>
+    <button onclick="selectPokemon(electrode)">Electrode</button>
+    <button onclick="selectPokemon(exeggcute)">Exeggcute</button>
+    <button onclick="selectPokemon(exeggutor)">Exeggutor</button>
+    <button onclick="selectPokemon(cubone)">Cubone</button>
+    <button onclick="selectPokemon(marowak)">Marowak</button>
+    <button onclick="selectPokemon(hitmonlee)">Hitmonlee</button>
+    <button onclick="selectPokemon(hitmonchan)">Hitmonchan</button>
+    <button onclick="selectPokemon(lickitung)">Lickitung</button>
+    <button onclick="selectPokemon(koffing)">Koffing</button>
+    <button onclick="selectPokemon(weezing)">Weezing</button>
+    <button onclick="selectPokemon(rhyhorn)">Rhyhorn</button>
+    <button onclick="selectPokemon(rhydon)">Rhydon</button>
+    <button onclick="selectPokemon(chansey)">Chansey</button>
+    <button onclick="selectPokemon(tangela)">Tangela</button>
+    <button onclick="selectPokemon(kangaskhan)">Kangaskhan</button>
+    <button onclick="selectPokemon(horsea)">Horsea</button>
+    <button onclick="selectPokemon(seadra)">Seadra</button>
+    <button onclick="selectPokemon(goldeen)">Goldeen</button>
+    <button onclick="selectPokemon(seaking)">Seaking</button>
+    <button onclick="selectPokemon(staryu)">Staryu</button>
+    <button onclick="selectPokemon(starmie)">Starmie</button>
+    <button onclick="selectPokemon(mrmime)">Mr. Mime</button>
+    <button onclick="selectPokemon(scyther)">Scyther</button>
+    <button onclick="selectPokemon(jynx)">Jynx</button>
+    <button onclick="selectPokemon(electabuzz)">Electabuzz</button>
+    <button onclick="selectPokemon(magmar)">Magmar</button>
+    <button onclick="selectPokemon(pinsir)">Pinsir</button>
+    <button onclick="selectPokemon(tauros)">Tauros</button>
+    <button onclick="selectPokemon(magikarp)">Magikarp</button>
+    <button onclick="selectPokemon(gyarados)">Gyarados</button>
+    <button onclick="selectPokemon(lapras)">Lapras</button>
+    <button onclick="selectPokemon(ditto)">Ditto</button>
+    <button onclick="selectPokemon(eevee)">Eevee</button>
+    <button onclick="selectPokemon(vaporeon)">Vaporeon</button>
+    <button onclick="selectPokemon(jolteon)">Jolteon</button>
+    <button onclick="selectPokemon(flareon)">Flareon</button>
+    <button onclick="selectPokemon(porygon)">Porygon</button>
+    <button onclick="selectPokemon(omanyte)">Omanyte</button>
+    <button onclick="selectPokemon(omastar)">Omastar</button>
+    <button onclick="selectPokemon(kabuto)">Kabuto</button>
+    <button onclick="selectPokemon(kabutops)">Kabutops</button>
+    <button onclick="selectPokemon(aerodactyl)">Aerodactyl</button>
+    <button onclick="selectPokemon(snorlax)">Snorlax</button>
+    <button onclick="selectPokemon(articuno)">Articuno</button>
+    <button onclick="selectPokemon(zapdos)">Zapdos</button>
+    <button onclick="selectPokemon(moltres)">Moltres</button>
+    <button onclick="selectPokemon(dratini)">Dratini</button>
+    <button onclick="selectPokemon(dragonair)">Dragonair</button>
+    <button onclick="selectPokemon(dragonite)">Dragonite</button>
+    <button onclick="selectPokemon(mewtwo)">Mewtwo</button>
+    <button onclick="selectPokemon(mew)">Mew</button>
   </div>
   <div id="typeChart">
     <h2>Type Chart</h2>
@@ -58,185 +198,3 @@
         this.defense = defense;
         this.moves = moves;
       }
-
-      useMove(move, opponent) {
-        const damage = Math.max(this.attack * move.power - opponent.defense, 0);
-        const typeEffectiveness = getTypeEffectiveness(move.type, opponent.type);
-        const totalDamage = damage * typeEffectiveness;
-        opponent.hp -= totalDamage;
-        log(`You used ${move.name}! ${this.name} dealt ${totalDamage} damage to ${opponent.name}!`);
-      }
-
-      defend() {
-        this.defense *= 2;
-        log(`${this.name} defended and increased its defense!`);
-      }
-    }
-
-    // Create Pokemon
-    const pikachu = new Pokemon('Pikachu', 'Electric', 100, 50, 20, [
-      { name: 'Thunderbolt', type: 'Electric', power: 1.5 },
-      { name: 'Quick Attack', type: 'Normal', power: 1.2 },
-      { name: 'Iron Tail', type: 'Steel', power: 1.4 },
-      { name: 'Electro Ball', type: 'Electric', power: 1.6 }
-    ]);
-    const bulbasaur = new Pokemon('Bulbasaur', 'Grass', 120, 40, 30, [
-      { name: 'Razor Leaf', type: 'Grass', power: 1.3 },
-      { name: 'Vine Whip', type: 'Grass', power: 1.1 },
-      { name: 'Leech Seed', type: 'Grass', power: 0.8 },
-      { name: 'Seed Bomb', type: 'Grass', power: 1.5 }
-    ]);
-    const charmander = new Pokemon('Charmander', 'Fire', 80, 60, 15, [
-      { name: 'Flamethrower', type: 'Fire', power: 1.7 },
-      { name: 'Ember', type: 'Fire', power: 1.2 },
-      { name: 'Scratch', type: 'Normal', power: 1.1 },
-      { name: 'Fire Spin', type: 'Fire', power: 1.4 }
-    ]);
-    const squirtle = new Pokemon('Squirtle', 'Water', 110, 45, 25, [
-      { name: 'Hydro Pump', type: 'Water', power: 1.4 },
-      { name: 'Water Gun', type: 'Water', power: 1.1 },
-      { name: 'Bubble', type: 'Water', power: 1.2 },
-      { name: 'Aqua Tail', type: 'Water', power: 1.6 }
-    ]);
-    const butterfree = new Pokemon('Butterfree', 'Bug', 90, 55, 15, [
-      { name: 'Silver Wind', type: 'Bug', power: 1.6 },
-      { name: 'Gust', type: 'Flying', power: 1.1 },
-      { name: 'Psybeam', type: 'Psychic', power: 1.3 },
-      { name: 'Bug Buzz', type: 'Bug', power: 1.5 }
-    ]);
-    const geodude = new Pokemon('Geodude', 'Rock', 130, 35, 40, [
-      { name: 'Rock Throw', type: 'Rock', power: 1.2 },
-      { name: 'Tackle', type: 'Normal', power: 1.1 },
-      { name: 'Rock Blast', type: 'Rock', power: 1.4 },
-      { name: 'Rollout', type: 'Rock', power: 1.6 }
-    ]);
-
-    // Initialize battle
-    let playerPokemon;
-    let opponentPokemon;
-    let opponentName;
-
-    // Select Pokemon
-    function selectPokemon(pokemon) {
-      playerPokemon = pokemon;
-      document.getElementById('pokemonSelection').style.display = 'none';
-      document.getElementById('playerControls').style.display = 'block';
-      document.getElementById('opponentControls').style.display = 'block';
-      generateOpponent();
-      updateUI();
-      enableControls();
-    }
-
-    // Generate opponent
-    function generateOpponent() {
-      const opponents = [
-        { name: 'Ash', pokemon: pikachu },
-        { name: 'Misty', pokemon: squirtle },
-        { name: 'Brock', pokemon: geodude },
-        { name: 'Gary', pokemon: charmander },
-        { name: 'Jessie', pokemon: butterfree },
-        { name: 'James', pokemon: bulbasaur }
-      ];
-      const randomIndex = Math.floor(Math.random() * opponents.length);
-      opponentName = opponents[randomIndex].name;
-      opponentPokemon = opponents[randomIndex].pokemon;
-    }
-
-    // Battle functions
-    function move1() {
-      playerPokemon.useMove(playerPokemon.moves[0], opponentPokemon);
-      updateUI();
-      enemyTurn();
-    }
-
-    function move2() {
-      playerPokemon.useMove(playerPokemon.moves[1], opponentPokemon);
-      updateUI();
-      enemyTurn();
-    }
-
-    function move3() {
-      playerPokemon.useMove(playerPokemon.moves[2], opponentPokemon);
-      updateUI();
-      enemyTurn();
-    }
-
-    function move4() {
-      playerPokemon.useMove(playerPokemon.moves[3], opponentPokemon);
-      updateUI();
-      enemyTurn();
-    }
-
-    function defend() {
-      playerPokemon.defend();
-      updateUI();
-      enemyTurn();
-    }
-
-    function enemyTurn() {
-      const randomMove = Math.floor(Math.random() * 4);
-      opponentPokemon.useMove(opponentPokemon.moves[randomMove], playerPokemon);
-      updateUI();
-      checkWinner();
-    }
-
-    function checkWinner() {
-      if (playerPokemon.hp <= 0) {
-        log(`${opponentName}'s ${opponentPokemon.name} wins!`);
-        disableControls();
-      } else if (opponentPokemon.hp <= 0) {
-        log(`${playerPokemon.name} wins!`);
-        disableControls();
-      }
-    }
-
-    // Logging function
-    function log(message) {
-      const battleLog = document.getElementById('battleLog');
-      const p = document.createElement('p');
-      p.textContent = message;
-      battleLog.appendChild(p);
-    }
-
-    // Update UI
-    function updateUI() {
-      document.getElementById('playerPokemonName').textContent = playerPokemon.name;
-      document.getElementById('playerPokemonHP').textContent = playerPokemon.hp;
-      document.getElementById('playerPokemonAttack').textContent = playerPokemon.attack;
-      document.getElementById('opponentName').textContent = opponentName;
-      document.getElementById('opponentPokemonName').textContent = opponentPokemon.name;
-      document.getElementById('opponentPokemonHP').textContent = opponentPokemon.hp;
-    }
-
-    // Enable/Disable controls
-    function enableControls() {
-      document.querySelectorAll('#playerControls button').forEach(button => {
-        button.disabled = false;
-      });
-    }
-
-    function disableControls() {
-      document.querySelectorAll('#playerControls button').forEach(button => {
-        button.disabled = true;
-      });
-    }
-
-    // Type effectiveness
-    function getTypeEffectiveness(moveType, pokemonType) {
-      const typeChart = {
-        Normal: { Normal: 1, Fire: 1, Water: 1, Grass: 1, Electric: 1, Rock: 1, Ground: 1, Bug: 1, Fighting: 1 },
-        Fire: { Normal: 1, Fire: 0.5, Water: 0.5, Grass: 2, Electric: 1, Rock: 0.5, Ground: 2, Bug: 0.5, Fighting: 1 },
-        Water: { Normal: 1, Fire: 2, Water: 0.5, Grass: 0.5, Electric: 1, Rock: 2, Ground: 1, Bug: 1, Fighting: 1 },
-        Grass: { Normal: 1, Fire: 0.5, Water: 2, Grass: 0.5, Electric: 0.5, Rock: 2, Ground: 0.5, Bug: 0.5, Fighting: 1 },
-        Electric: { Normal: 1, Fire: 1, Water: 2, Grass: 0.5, Electric: 0.5, Rock: 1, Ground: 0, Bug: 1, Fighting: 1 },
-        Rock: { Normal: 0.5, Fire: 2, Water: 2, Grass: 2, Electric: 1, Rock: 1, Ground: 0.5, Bug: 1, Fighting: 0.5 },
-        Ground: { Normal: 1, Fire: 2, Water: 2, Grass: 0.5, Electric: 2, Rock: 0.5, Ground: 1, Bug: 1, Fighting: 1 },
-        Bug: { Normal: 1, Fire: 0.5, Water: 1, Grass: 2, Electric: 1, Rock: 1, Ground: 0.5, Bug: 1, Fighting: 0.5 },
-        Fighting: { Normal: 2, Fire: 1, Water: 1, Grass: 1, Electric: 1, Rock: 2, Ground: 1, Bug: 0.5, Fighting: 1 }
-      };
-
-      return typeChart[moveType][pokemonType];
-    }
-  </script>
-</body>
-</html>
