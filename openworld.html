@@ -4,43 +4,134 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Open World 2D Game</title>
-    <style>
-        canvas {
-            border: 1px solid black;
-        }
-    </style>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
 </head>
 <body>
-    <canvas id="gameCanvas" width="800" height="600"></canvas>
-
     <script>
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
+        const config = {
+            type: Phaser.AUTO,
+            width: 800,
+            height: 600,
+            physics: {
+                default: 'arcade',
+                arcade: {
+                    gravity: { y: 0 },
+                    debug: false
+                }
+            },
+            scene: {
+                preload: preload,
+                create: create,
+                update: update
+            }
+        };
 
-        // Game variables
-        let playerX = 400;
-        let playerY = 300;
-        const playerSpeed = 5;
-        const playerSize = 20;
+        const game = new Phaser.Game(config);
+    let player;
+    let cursors;
+    let bushes;
+    let trees;
+    let borders;
+    let pewpew;
+    let monster;
+    const playerSpeed = 200;
+    const pewpewSpeed = 400;
 
-        // Game objects
-        const objects = [
-            { x: 100, y: 100, width: 50, height: 50, type: 'bush' },
-            { x: 300, y: 200, width: 80, height: 120, type: 'tree' },
-            { x: 0, y: 0, width: canvas.width, height: 10, type: 'border' },
-            { x: 0, y: canvas.height - 10, width: canvas.width, height: 10, type: 'border' },
-            { x: 0, y: 0, width: 10, height: canvas.height, type: 'border' },
-            { x: canvas.width - 10, y: 0, width: 10, height: canvas.height, type: 'border' },
-            { x: 200, y: 400, width: 60, height: 40, type: 'bush' },
-            { x: 500, y: 100, width: 40, height: 60, type: 'bush' },
-            { x: 600, y: 300, width: 70, height: 50, type: 'bush' },
-            { x: 50, y: 500, width: 30, height: 30, type: 'bush' }
-        ];
+    function preload() {
+        // Load SVG images from separate files
+        this.load.svg('player', 'assets/player.svg');
+        this.load.svg('bush', 'assets/bush.svg');
+        this.load.svg('tree', 'assets/tree.svg');
+        this.load.svg('border', 'assets/border.svg');
+        this.load.svg('monster', 'assets/monster.svg');
+        this.load.svg('pewpew', 'assets/pewpew.svg');
+        this.load.svg('explosion', 'assets/explosion.svg');
+    }
 
-        // ... (rest of the code remains the same)
+    function create() {
+        // Set the background color to white
+        this.cameras.main.setBackgroundColor('#32CD32');
 
-        // Start the game loop
-        gameLoop();
+        // Create game objects
+        player = this.physics.add.sprite(400, 300, 'player');
+
+        bushes = this.physics.add.staticGroup();
+        bushes.create(100, 100, 'bush').setScale(1).refreshBody();
+        bushes.create(200, 400, 'bush').setScale(1.2, 0.8).refreshBody();
+        bushes.create(500, 100, 'bush').setScale(0.8, 1.2).refreshBody();
+        bushes.create(600, 300, 'bush').setScale(1.4, 1).refreshBody();
+        bushes.create(50, 500, 'bush').setScale(0.6, 0.6).refreshBody();
+
+        trees = this.physics.add.staticGroup();
+        trees.create(300, 200, 'tree').setScale(1).refreshBody();
+        trees.create(50, 50, 'tree').setScale(1).refreshBody();
+        trees.create(600, 250, 'tree').setScale(1).refreshBody();
+
+
+        monster = this.physics.add.staticGroup();
+        monster.create(400, 400, 'monster').setScale(1).refreshBody();
+
+        pewpew = this.physics.add.group();
+
+        cursors = this.input.keyboard.createCursorKeys();
+        this.input.on('pointerdown', shootPewpew, this);
+
+        // Set collision between player and game objects
+        this.physics.add.collider(player, bushes);
+        this.physics.add.collider(player, trees);
+        this.physics.add.collider(player, borders);
+        this.physics.add.collider(player, monster);
+
+        // Set collision between pewpew and monster
+        this.physics.add.overlap(pewpew, monster, handlePewpewCollision, null, this);
+        this.physics.add.overlap(pewpew, trees, handlePewpewCollision, null, this);
+        this.physics.add.overlap(pewpew, bushes, handlePewpewCollision, null, this);
+
+
+    }
+
+    function update() {
+        // Update game state
+        handleInput();
+    }
+
+    function handleInput() {
+        player.setVelocity(0);
+
+        if (cursors.up.isDown) {
+            player.setVelocityY(-playerSpeed);
+        } else if (cursors.down.isDown) {
+            player.setVelocityY(playerSpeed);
+        }
+
+        if (cursors.left.isDown) {
+            player.setVelocityX(-playerSpeed);
+        } else if (cursors.right.isDown) {
+            player.setVelocityX(playerSpeed);
+        }
+    }
+
+    function shootPewpew(pointer) {
+        let pewpewInstance = pewpew.create(player.x, player.y, 'pewpew');
+        let angle = Phaser.Math.Angle.Between(player.x, player.y, pointer.x, pointer.y);
+        pewpewInstance.setRotation(angle);
+        this.physics.velocityFromRotation(angle, pewpewSpeed, pewpewInstance.body.velocity);
+    }
+
+    function handlePewpewCollision(pewpewInstance, monsterInstance) {
+        // Create an explosion sprite at the collision location
+        let explosion = this.add.sprite(pewpewInstance.x, pewpewInstance.y, 'explosion');
+        explosion.setScale(0.5); // Adjust the scale as needed
+
+        // Destroy the pewpew and the monster
+        pewpewInstance.destroy();
+        monsterInstance.destroy();
+
+        // Destroy the explosion sprite after a short delay
+        this.time.delayedCall(200, () => {
+            explosion.destroy();
+        });
+    }
     </script>
 </body>
 </html>
