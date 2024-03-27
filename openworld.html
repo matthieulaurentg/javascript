@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open World 2D Game</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Game variables
+        let playerX = 400;
+        let playerY = 300;
+        const playerSpeed = 5;
+
+        // Game loop
+        function gameLoop() {
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Update game state
+            handleInput();
+
+            // Draw game objects
+            drawPlayer();
+
+            // Request next frame
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Handle user input
+        function handleInput() {
+            // Example: Move player with arrow keys
+            if (keyPressed['ArrowUp']) {
+                playerY -= playerSpeed;
+            }
+            if (keyPressed['ArrowDown']) {
+                playerY += playerSpeed;
+            }
+            if (keyPressed['ArrowLeft']) {
+                playerX -= playerSpeed;
+            }
+            if (keyPressed['ArrowRight']) {
+                playerX += playerSpeed;
+            }
+        }
+
+        // Draw player
+        function drawPlayer() {
+            ctx.fillStyle = 'blue';
+            ctx.fillRect(playerX, playerY, 20, 20);
+        }
+
+        // Keyboard event listeners
+        const keyPressed = {};
+        document.addEventListener('keydown', (event) => {
+            keyPressed[event.code] = true;
+        });
+        document.addEventListener('keyup', (event) => {
+            keyPressed[event.code] = false;
+        });
+
+        // Start the game loop
+        gameLoop();
+    </script>
+</body>
+</html>
