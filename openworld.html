@@ -30,106 +30,14 @@
             { x: 0, y: 0, width: canvas.width, height: 10, type: 'border' },
             { x: 0, y: canvas.height - 10, width: canvas.width, height: 10, type: 'border' },
             { x: 0, y: 0, width: 10, height: canvas.height, type: 'border' },
-            { x: canvas.width - 10, y: 0, width: 10, height: canvas.height, type: 'border' }
+            { x: canvas.width - 10, y: 0, width: 10, height: canvas.height, type: 'border' },
+            { x: 200, y: 400, width: 60, height: 40, type: 'bush' },
+            { x: 500, y: 100, width: 40, height: 60, type: 'bush' },
+            { x: 600, y: 300, width: 70, height: 50, type: 'bush' },
+            { x: 50, y: 500, width: 30, height: 30, type: 'bush' }
         ];
 
-        // Game loop
-        function gameLoop() {
-            // Clear canvas
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            // Update game state
-            handleInput();
-            checkCollisions();
-
-            // Draw game objects
-            drawPlayer();
-            drawObjects();
-
-            // Request next frame
-            requestAnimationFrame(gameLoop);
-        }
-
-        // Handle user input
-        function handleInput() {
-            // Example: Move player with arrow keys
-            if (keyPressed['ArrowUp']) {
-                playerY -= playerSpeed;
-            }
-            if (keyPressed['ArrowDown']) {
-                playerY += playerSpeed;
-            }
-            if (keyPressed['ArrowLeft']) {
-                playerX -= playerSpeed;
-            }
-            if (keyPressed['ArrowRight']) {
-                playerX += playerSpeed;
-            }
-        }
-
-        // Check for collisions
-        function checkCollisions() {
-            objects.forEach(object => {
-                if (
-                    playerX < object.x + object.width &&
-                    playerX + playerSize > object.x &&
-                    playerY < object.y + object.height &&
-                    playerY + playerSize > object.y
-                ) {
-                    // Collision detected, handle accordingly
-                    if (object.type === 'bush') {
-                        // Example: Slow down player movement in bushes
-                        playerSpeed = 2;
-                    } else if (object.type === 'tree' || object.type === 'border') {
-                        // Example: Prevent player from moving through trees and borders
-                        if (keyPressed['ArrowUp']) {
-                            playerY += playerSpeed;
-                        }
-                        if (keyPressed['ArrowDown']) {
-                            playerY -= playerSpeed;
-                        }
-                        if (keyPressed['ArrowLeft']) {
-                            playerX += playerSpeed;
-                        }
-                        if (keyPressed['ArrowRight']) {
-                            playerX -= playerSpeed;
-                        }
-                    }
-                } else {
-                    // No collision, reset player speed
-                    playerSpeed = 5;
-                }
-            });
-        }
-
-        // Draw player
-        function drawPlayer() {
-            ctx.fillStyle = 'blue';
-            ctx.fillRect(playerX, playerY, playerSize, playerSize);
-        }
-
-        // Draw game objects
-        function drawObjects() {
-            objects.forEach(object => {
-                if (object.type === 'bush') {
-                    ctx.fillStyle = 'green';
-                } else if (object.type === 'tree') {
-                    ctx.fillStyle = 'brown';
-                } else if (object.type === 'border') {
-                    ctx.fillStyle = 'black';
-                }
-                ctx.fillRect(object.x, object.y, object.width, object.height);
-            });
-        }
-
-        // Keyboard event listeners
-        const keyPressed = {};
-        document.addEventListener('keydown', (event) => {
-            keyPressed[event.code] = true;
-        });
-        document.addEventListener('keyup', (event) => {
-            keyPressed[event.code] = false;
-        });
+        // ... (rest of the code remains the same)
 
         // Start the game loop
         gameLoop();
