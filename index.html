@@ -4,59 +4,72 @@
     <title>DDR-Style Game</title>
     <style>
         #game {
-            position: relative;
-            width: 400px;
-            height: 600px;
-            margin: 0 auto;
-            border: 1px solid black;
-            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
 
         .arrow {
-            position: absolute;
             width: 50px;
             height: 100px;
             background-color: gray;
             border-radius: 10px;
-            animation: fall 5s linear infinite;
+            margin: 0 10px;
         }
 
-        .arrow.left {
-            left: 50px;
-            animation-delay: 0s;
-        }
-
-        .arrow.down {
-            left: 125px;
-            animation-delay: 1.25s;
-        }
-
-        .arrow.up {
-            left: 200px;
-            animation-delay: 2.5s;
-        }
-
-        .arrow.right {
-            left: 275px;
-            animation-delay: 3.75s;
-        }
-
-        @keyframes fall {
-            0% {
-                top: -100px;
-            }
-            100% {
-                top: 600px;
-            }
+        .arrow.active {
+            background-color: yellow;
         }
     </style>
 </head>
 <body>
     <div id="game">
-        <div class="arrow left"></div>
-        <div class="arrow down"></div>
-        <div class="arrow up"></div>
-        <div class="arrow right"></div>
+        <div class="arrow" id="leftArrow"></div>
+        <div class="arrow" id="downArrow"></div>
+        <div class="arrow" id="upArrow"></div>
+        <div class="arrow" id="rightArrow"></div>
     </div>
+
+    <script>
+        const leftArrow = document.getElementById('leftArrow');
+        const downArrow = document.getElementById('downArrow');
+        const upArrow = document.getElementById('upArrow');
+        const rightArrow = document.getElementById('rightArrow');
+
+        document.addEventListener('keydown', handleKeyDown);
+        document.addEventListener('keyup', handleKeyUp);
+
+        function handleKeyDown(event) {
+            const key = event.key;
+            const arrow = getArrow(key);
+            if (arrow) {
+                arrow.classList.add('active');
+            }
+        }
+
+        function handleKeyUp(event) {
+            const key = event.key;
+            const arrow = getArrow(key);
+            if (arrow) {
+                arrow.classList.remove('active');
+            }
+        }
+
+        function getArrow(key) {
+            switch (key) {
+                case 'ArrowLeft':
+                    return leftArrow;
+                case 'ArrowDown':
+                    return downArrow;
+                case 'ArrowUp':
+                    return upArrow;
+                case 'ArrowRight':
+                    return rightArrow;
+                default:
+                    return null;
+            }
+        }
+    </script>
 </body>
 </html>
