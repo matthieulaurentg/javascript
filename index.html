@@ -1,23 +1,62 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Index</title>
+    <title>DDR-Style Game</title>
+    <style>
+        #game {
+            position: relative;
+            width: 400px;
+            height: 600px;
+            margin: 0 auto;
+            border: 1px solid black;
+            overflow: hidden;
+        }
+
+        .arrow {
+            position: absolute;
+            width: 50px;
+            height: 100px;
+            background-color: gray;
+            border-radius: 10px;
+            animation: fall 5s linear infinite;
+        }
+
+        .arrow.left {
+            left: 50px;
+            animation-delay: 0s;
+        }
+
+        .arrow.down {
+            left: 125px;
+            animation-delay: 1.25s;
+        }
+
+        .arrow.up {
+            left: 200px;
+            animation-delay: 2.5s;
+        }
+
+        .arrow.right {
+            left: 275px;
+            animation-delay: 3.75s;
+        }
+
+        @keyframes fall {
+            0% {
+                top: -100px;
+            }
+            100% {
+                top: 600px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Index</h1>
-    <ul>
-        <li><a href="tictactoe.html">Tic Tac Toe</a></li>
-        <li><a href="name.html">Name</a></li>
-        <li><a href="subway.html">subway</a></li>
-        <li><a href="snake.html">snake</a></li>
-        <li><a href="tetris.html">tetris</a></li>
-        <li><a href="poke.html">pokemon</a></li>
-        <li><a href="platformer.html">platformer</a></li>
-        <li><a href="openworld.html">open world</a></li>
-        <li><a href="fnf.html">FNF</a></li>
-
-    </ul>
+    <div id="game">
+        <div class="arrow left"></div>
+        <div class="arrow down"></div>
+        <div class="arrow up"></div>
+        <div class="arrow right"></div>
+    </div>
 </body>
 </html>
