@@ -1,75 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>DDR-Style Game</title>
-    <style>
-        #game {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        .arrow {
-            width: 50px;
-            height: 100px;
-            background-color: gray;
-            border-radius: 10px;
-            margin: 0 10px;
-        }
-
-        .arrow.active {
-            background-color: yellow;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index</title>
 </head>
 <body>
-    <div id="game">
-        <div class="arrow" id="leftArrow"></div>
-        <div class="arrow" id="downArrow"></div>
-        <div class="arrow" id="upArrow"></div>
-        <div class="arrow" id="rightArrow"></div>
-    </div>
+    <h1>Index</h1>
+    <ul>
+        <li><a href="tictactoe.html">Tic Tac Toe</a></li>
+        <li><a href="name.html">Name</a></li>
+        <li><a href="subway.html">subway</a></li>
+        <li><a href="snake.html">snake</a></li>
+        <li><a href="tetris.html">tetris</a></li>
+        <li><a href="poke.html">pokemon</a></li>
+        <li><a href="platformer.html">platformer</a></li>
+        <li><a href="openworld.html">open world</a></li>
+        <li><a href="fnf.html">FNF</a></li>
+        <li><a href="magical.html">magical</a></li>
 
-    <script>
-        const leftArrow = document.getElementById('leftArrow');
-        const downArrow = document.getElementById('downArrow');
-        const upArrow = document.getElementById('upArrow');
-        const rightArrow = document.getElementById('rightArrow');
 
-        document.addEventListener('keydown', handleKeyDown);
-        document.addEventListener('keyup', handleKeyUp);
-
-        function handleKeyDown(event) {
-            const key = event.key;
-            const arrow = getArrow(key);
-            if (arrow) {
-                arrow.classList.add('active');
-            }
-        }
-
-        function handleKeyUp(event) {
-            const key = event.key;
-            const arrow = getArrow(key);
-            if (arrow) {
-                arrow.classList.remove('active');
-            }
-        }
-
-        function getArrow(key) {
-            switch (key) {
-                case 'ArrowLeft':
-                    return leftArrow;
-                case 'ArrowDown':
-                    return downArrow;
-                case 'ArrowUp':
-                    return upArrow;
-                case 'ArrowRight':
-                    return rightArrow;
-                default:
-                    return null;
-            }
-        }
-    </script>
+    </ul>
 </body>
 </html>
