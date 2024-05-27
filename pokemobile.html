@@ -62,10 +62,10 @@
     <h2>Your Pokemon: <span id="playerPokemonName"></span></h2>
     <p>HP: <span id="playerPokemonHP"></span></p>
     <p>Attack: <span id="playerPokemonAttack"></span></p>
-    <button onclick="move1()">Move 1</button>
-    <button onclick="move2()">Move 2</button>
-    <button onclick="move3()">Move 3</button>
-    <button onclick="move4()">Move 4</button>
+    <button onclick="move(0)">Move 1</button>
+    <button onclick="move(1)">Move 2</button>
+    <button onclick="move(2)">Move 3</button>
+    <button onclick="move(3)">Move 4</button>
   </div>
   <div id="opponentControls" style="display: none;">
     <h2>Opponent: <span id="opponentName"></span></h2>
@@ -74,13 +74,12 @@
   </div>
   <div id="pokemonSelection">
     <h2>Select your Pokemon:</h2>
-    <input type="text" id="playerPokemonNameInput" placeholder="Enter your Pokemon's name">
-    <button class="pokemon-button" onclick="selectPokemon(pikachu)">Pikachu</button>
-    <button class="pokemon-button" onclick="selectPokemon(bulbasaur)">Bulbasaur</button>
-    <button class="pokemon-button" onclick="selectPokemon(charmander)">Charmander</button>
-    <button class="pokemon-button" onclick="selectPokemon(squirtle)">Squirtle</button>
-    <button class="pokemon-button" onclick="selectPokemon(butterfree)">Butterfree</button>
-    <button class="pokemon-button" onclick="selectPokemon(geodude)">Geodude</button>
+    <button class="pokemon-button" onclick="selectPokemon('pikachu')">Pikachu</button>
+    <button class="pokemon-button" onclick="selectPokemon('bulbasaur')">Bulbasaur</button>
+    <button class="pokemon-button" onclick="selectPokemon('charmander')">Charmander</button>
+    <button class="pokemon-button" onclick="selectPokemon('squirtle')">Squirtle</button>
+    <button class="pokemon-button" onclick="selectPokemon('butterfree')">Butterfree</button>
+    <button class="pokemon-button" onclick="selectPokemon('geodude')">Geodude</button>
   </div>
   <div id="typeChart">
     <h2>Type Chart</h2>
@@ -165,9 +164,6 @@
       { name: 'Rollout', type: 'Rock', power: 1.6 }
     ]);
 
-    // Initialize battle
     let playerPokemon;
     let opponentPokemon;
-    let opponent = { name: 'Opponent', pokemon: [bulbasaur, charmander, squirtle, butterfree, geodude] };
-
-    // Type effectiveness
+    const opponent = { name: 'Opponent', pokemon:
