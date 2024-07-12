@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drag and Drop Game with Timer and Multiple Drop Zones</title>
+    <title>Drag and Drop Game with Timer and Leaderboard</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -57,10 +57,26 @@
             justify-content: space-around;
             width: 80%;
         }
+
+        #leaderboard {
+            margin-top: 20px;
+            width: 80%;
+        }
+
+        #leaderboard table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        #leaderboard th, #leaderboard td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
-    <h1>Drag and Drop Game with Timer and Multiple Drop Zones</h1>
+    <h1>Drag and Drop Game with Timer and Leaderboard</h1>
     <div id="timer">Time left: <span id="time">30</span> seconds</div>
     <div id="items">
         <div class="item" draggable="true" id="item1">Item 1</div>
@@ -71,6 +87,19 @@
         <div class="drop-box" ondrop="drop(event)" ondragover="allowDrop(event)" data-correct-item="item1">Box 1</div>
         <div class="drop-box" ondrop="drop(event)" ondragover="allowDrop(event)" data-correct-item="item2">Box 2</div>
         <div class="drop-box" ondrop="drop(event)" ondragover="allowDrop(event)" data-correct-item="item3">Box 3</div>
+    </div>
+    <div id="leaderboard">
+        <h2>Leaderboard</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Player</th>
+                    <th>Time Left</th>
+                </tr>
+            </thead>
+            <tbody id="leaderboard-body">
+            </tbody>
+        </table>
     </div>
     <script>
         function allowDrop(event) {
@@ -89,12 +118,10 @@
 
             if (data === correctItem) {
                 event.target.appendChild(item);
+                checkWinCondition();
             } else {
                 alert("Wrong item! Game over.");
-                clearInterval(timerInterval);
-                document.querySelectorAll('.item').forEach(item => {
-                    item.setAttribute('draggable', 'false');
-                });
+                endGame();
             }
         }
 
@@ -104,6 +131,8 @@
 
         var timeLeft = 30; // Set the timer duration in seconds
         var timerElement = document.getElementById('time');
+        var timerInterval = setInterval(updateTimer, 1000);
+        var playerName = prompt("Enter your name:");
 
         function updateTimer() {
             if (timeLeft > 0) {
@@ -111,14 +140,49 @@
                 timerElement.textContent = timeLeft;
             } else {
                 alert("Time's up! Game over.");
-                clearInterval(timerInterval);
-                document.querySelectorAll('.item').forEach(item => {
-                    item.setAttribute('draggable', 'false');
-                });
+                endGame();
             }
         }
 
-        var timerInterval = setInterval(updateTimer, 1000);
+        function endGame() {
+            clearInterval(timerInterval);
+            document.querySelectorAll('.item').forEach(item => {
+                item.setAttribute('draggable', 'false');
+            });
+        }
+
+        function checkWinCondition() {
+            var boxes = document.querySelectorAll('.drop-box');
+            var allCorrect = true;
+
+            boxes.forEach(box => {
+                if (box.children.length === 0 || box.children[0].id !== box.getAttribute('data-correct-item')) {
+                    allCorrect = false;
+                }
+            });
+
+            if (allCorrect) {
+                alert("You win!");
+                endGame();
+                updateLeaderboard(playerName, timeLeft);
+            }
+        }
+
+        function updateLeaderboard(name, time) {
+            var leaderboardBody = document.getElementById('leaderboard-body');
+            var newRow = document.createElement('tr');
+
+            var nameCell = document.createElement('td');
+            nameCell.textContent = name;
+
+            var timeCell = document.createElement('td');
+            timeCell.textContent = time;
+
+            newRow.appendChild(nameCell);
+            newRow.appendChild(timeCell);
+
+            leaderboardBody.appendChild(newRow);
+        }
     </script>
 </body>
 </html>
