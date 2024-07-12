@@ -73,30 +73,31 @@
         function updatePhysics() {
             if (!isDragging) {
                 velocityY += gravity;
-                velocityX *= friction;
-                velocityY *= friction;
 
                 let newX = ball.offsetLeft + velocityX;
                 let newY = ball.offsetTop + velocityY;
 
                 if (newX + ball.offsetWidth > container.clientWidth) {
                     newX = container.clientWidth - ball.offsetWidth;
-                    velocityX *= -1;
+                    velocityX *= -0.9; // Adding some loss of energy on bounce
                 } else if (newX < 0) {
                     newX = 0;
-                    velocityX *= -1;
+                    velocityX *= -0.9; // Adding some loss of energy on bounce
                 }
 
                 if (newY + ball.offsetHeight > container.clientHeight) {
                     newY = container.clientHeight - ball.offsetHeight;
-                    velocityY *= -1;
+                    velocityY *= -0.9; // Adding some loss of energy on bounce
                 } else if (newY < 0) {
                     newY = 0;
-                    velocityY *= -1;
+                    velocityY *= -0.9; // Adding some loss of energy on bounce
                 }
 
                 ball.style.left = `${newX}px`;
                 ball.style.top = `${newY}px`;
+
+                velocityX *= friction;
+                velocityY *= friction;
             }
             requestAnimationFrame(updatePhysics);
         }
