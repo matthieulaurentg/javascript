@@ -58,6 +58,26 @@
             width: 80%;
         }
 
+        #whack-a-mole {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .mole {
+            width: 100px;
+            height: 100px;
+            background-color: #ff5722;
+            border-radius: 50%;
+            margin: 10px;
+            cursor: pointer;
+        }
+
+        #whack-a-mole div {
+            display: flex;
+        }
+
         #leaderboard {
             margin-top: 20px;
             width: 80%;
@@ -88,6 +108,19 @@
         <div class="drop-box" ondrop="drop(event)" ondragover="allowDrop(event)" data-correct-item="item2">Box 2</div>
         <div class="drop-box" ondrop="drop(event)" ondragover="allowDrop(event)" data-correct-item="item3">Box 3</div>
     </div>
+    <div id="whack-a-mole">
+        <h2>Phase 2: Whack-a-Mole</h2>
+        <div>
+            <div class="mole" id="mole1"></div>
+            <div class="mole" id="mole2"></div>
+            <div class="mole" id="mole3"></div>
+        </div>
+        <div>
+            <div class="mole" id="mole4"></div>
+            <div class="mole" id="mole5"></div>
+            <div class="mole" id="mole6"></div>
+        </div>
+    </div>
     <div id="leaderboard">
         <h2>Leaderboard</h2>
         <table>
@@ -102,6 +135,7 @@
         </table>
     </div>
     <script>
+        // Drag and Drop Phase
         function allowDrop(event) {
             event.preventDefault();
         }
@@ -133,6 +167,7 @@
         var timerElement = document.getElementById('time');
         var timerInterval = setInterval(updateTimer, 1000);
         var playerName = prompt("Enter your name:");
+        var startTime = Date.now();
 
         function updateTimer() {
             if (timeLeft > 0) {
@@ -162,15 +197,52 @@
             });
 
             if (allCorrect) {
-                alert("You win!");
-                endGame();
-                updateLeaderboard(playerName, timeLeft);
+                clearInterval(timerInterval);
+                document.getElementById('items').style.display = 'none';
+                document.getElementById('boxes').style.display = 'none';
+                document.getElementById('whack-a-mole').style.display = 'flex';
+                startWhackAMole();
             }
         }
 
-        function updateLeaderboard(name, time) {
+        // Whack-a-Mole Phase
+        var moles = document.querySelectorAll('.mole');
+        var moleInterval;
+        var molesHit = 0;
+
+        function startWhackAMole() {
+            moles.forEach(mole => {
+                mole.addEventListener('click', hitMole);
+            });
+            moleInterval = setInterval(showMole, 1000);
+        }
+
+        function showMole() {
+            moles.forEach(mole => {
+                mole.style.backgroundColor = '#ff5722';
+            });
+            var randomMole = moles[Math.floor(Math.random() * moles.length)];
+            randomMole.style.backgroundColor = '#4caf50';
+        }
+
+        function hitMole(event) {
+            if (event.target.style.backgroundColor === '#4caf50') {
+                event.target.style.backgroundColor = '#ff5722';
+                molesHit++;
+                if (molesHit >= 10) {
+                    clearInterval(moleInterval);
+                    alert("You win Phase 2!");
+                    var totalTime = Math.floor((Date.now() - startTime) / 1000);
+                    updateLeaderboard(playerName, totalTime);
+                }
+            }
+        }
+
+        // Leaderboard
+        function updateLeaderboard(name, totalTime) {
             var leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
-            leaderboard.push({ name: name, time: time });
+            leaderboard.push({ name: name, time: totalTime });
+            leaderboard.sort((a, b) => a.time - b.time);
             localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
             renderLeaderboard();
         }
