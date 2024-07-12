@@ -18,7 +18,7 @@
         }
 
         #game-container {
-            max-width: 600px;
+            max-width: 800px;
             margin: 0 auto;
             background-color: #fff;
             padding: 20px;
@@ -98,6 +98,52 @@
         #machine-result {
             margin-top: 20px;
         }
+
+        /* Inventions GUI styles */
+        #inventions-container {
+            display: none;
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .invention {
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .invention h4 {
+            margin-bottom: 5px;
+        }
+
+        .invention ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .invention li {
+            margin-bottom: 3px;
+        }
+
+        #show-inventions-btn {
+            background-color: #008CBA;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        #show-inventions-btn:hover {
+            background-color: #005b7f;
+        }
     </style>
 </head>
 <body>
@@ -137,6 +183,7 @@
             <!-- Add more pieces as needed -->
         </div>
         <button id="assemble-btn" onclick="assembleMachine()">Assemble Machine</button>
+        <button id="show-inventions-btn" onclick="toggleInventions()">Show My Inventions</button>
         <div id="machine-list">
             <h3>Machines to Create:</h3>
             <ul>
@@ -145,6 +192,10 @@
                 <li>Solar-powered Drone: Engine, Propeller, Solar Panel</li>
                 <li>Heavy-duty Machine: Engine, Hydraulic System</li>
             </ul>
+        </div>
+        <div id="inventions-container">
+            <h3>My Inventions:</h3>
+            <div id="inventions-list"></div>
         </div>
         <div id="machine-result"></div>
     </div>
@@ -157,6 +208,9 @@
             { name: 'Solar-powered Drone', components: ['Engine', 'Propeller', 'Solar Panel'] },
             { name: 'Heavy-duty Machine', components: ['Engine', 'Hydraulic System'] }
         ];
+
+        // Array to store player's inventions
+        let inventions = [];
 
         // Function to assemble the machine
         function assembleMachine() {
@@ -182,11 +236,48 @@
 
             if (matchedMachine) {
                 result = `You successfully created a ${matchedMachine.name}!`;
+                // Add the invention to the list
+                inventions.push(matchedMachine);
             } else {
                 result = 'Machine could not be assembled. Invalid combination or missing components.';
             }
 
             document.getElementById('machine-result').textContent = result;
+        }
+
+        // Function to toggle inventions GUI visibility
+        function toggleInventions() {
+            const inventionsContainer = document.getElementById('inventions-container');
+            if (inventionsContainer.style.display === 'none') {
+                showInventions();
+                inventionsContainer.style.display = 'block';
+                document.getElementById('show-inventions-btn').textContent = 'Hide My Inventions';
+            } else {
+                inventionsContainer.style.display = 'none';
+                document.getElementById('show-inventions-btn').textContent = 'Show My Inventions';
+            }
+        }
+
+        // Function to display player's inventions
+        function showInventions() {
+            const inventionsList = document.getElementById('inventions-list');
+            inventionsList.innerHTML = '';
+
+            inventions.forEach((invention, index) => {
+                const inventionDiv = document.createElement('div');
+                inventionDiv.classList.add('invention');
+                const title = document.createElement('h4');
+                title.textContent = `${index + 1}. ${invention.name}`;
+                const componentsList = document.createElement('ul');
+                invention.components.forEach(component => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = component;
+                    componentsList.appendChild(listItem);
+                });
+                inventionDiv.appendChild(title);
+                inventionDiv.appendChild(componentsList);
+                inventionsList.appendChild(inventionDiv);
+            });
         }
     </script>
 </body>
