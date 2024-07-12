@@ -177,6 +177,31 @@
                 <img src="gearbox.png" alt="Gearbox">
                 Gearbox
             </label>
+            <label class="piece">
+                <input type="checkbox" value="Microcontroller"> 
+                <img src="microcontroller.png" alt="Microcontroller">
+                Microcontroller
+            </label>
+            <label class="piece">
+                <input type="checkbox" value="Antenna"> 
+                <img src="antenna.png" alt="Antenna">
+                Antenna
+            </label>
+            <label class="piece">
+                <input type="checkbox" value="LCD Display"> 
+                <img src="lcd-display.png" alt="LCD Display">
+                LCD Display
+            </label>
+            <label class="piece">
+                <input type="checkbox" value="Actuator"> 
+                <img src="actuator.png" alt="Actuator">
+                Actuator
+            </label>
+            <label class="piece">
+                <input type="checkbox" value="Solenoid"> 
+                <img src="solenoid.png" alt="Solenoid">
+                Solenoid
+            </label>
             <!-- Add more pieces as needed -->
         </div>
         <button id="assemble-btn" onclick="assembleMachine()">Assemble Machine</button>
@@ -199,7 +224,18 @@
             { name: 'Spacecraft', components: ['Engine', 'Propeller', 'Solar Panel', 'Battery'] },
             { name: 'Rover', components: ['Engine', 'Wheels', 'Battery', 'Sensor'] },
             { name: 'Drone', components: ['Propeller', 'Battery', 'Sensor'] },
-            { name: 'Mechanical Arm', components: ['Hydraulic System', 'Gearbox'] }
+            { name: 'Mechanical Arm', components: ['Hydraulic System', 'Gearbox'] },
+            { name: 'Satellite', components: ['Solar Panel', 'Antenna', 'Microcontroller'] },
+            { name: 'Smartphone', components: ['Microcontroller', 'LCD Display', 'Battery'] },
+            { name: 'Industrial Robot', components: ['Microcontroller', 'Actuator', 'Solenoid'] },
+            { name: 'Electric Bicycle', components: ['Battery', 'Wheels', 'LCD Display'] },
+            { name: 'Weather Station', components: ['Antenna', 'Microcontroller', 'Sensor'] },
+            { name: 'Medical Scanner', components: ['Microcontroller', 'Sensor', 'LCD Display'] },
+            { name: 'Security System', components: ['Microcontroller', 'Sensor', 'Solenoid'] },
+            { name: 'Drone Delivery System', components: ['Propeller', 'Battery', 'Antenna', 'Microcontroller'] },
+            { name: 'Smart Home Controller', components: ['Microcontroller', 'Sensor', 'Actuator'] },
+            { name: 'Virtual Reality Headset', components: ['LCD Display', 'Microcontroller', 'Sensor'] },
+            { name: 'Aquaponics System', components: ['Pump', 'Microcontroller', 'Sensor'] }
             // Add more machines as needed
         ];
 
