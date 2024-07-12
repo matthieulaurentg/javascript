@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drag and Drop Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        h1 {
+            margin-top: 20px;
+        }
+
+        #items {
+            display: flex;
+            justify-content: space-around;
+            width: 80%;
+            margin: 20px 0;
+        }
+
+        .item {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: grab;
+            margin: 0 10px;
+        }
+
+        #box {
+            width: 300px;
+            height: 300px;
+            border: 2px dashed #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #fff;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+    <h1>Drag and Drop Game</h1>
+    <div id="items">
+        <div class="item" draggable="true" id="item1">Item 1</div>
+        <div class="item" draggable="true" id="item2">Item 2</div>
+        <div class="item" draggable="true" id="item3">Item 3</div>
+    </div>
+    <div id="box" ondrop="drop(event)" ondragover="allowDrop(event)">
+        <p>Drop items here</p>
+    </div>
+    <script>
+        function allowDrop(event) {
+            event.preventDefault();
+        }
+
+        function drag(event) {
+            event.dataTransfer.setData("text", event.target.id);
+        }
+
+        function drop(event) {
+            event.preventDefault();
+            var data = event.dataTransfer.getData("text");
+            var item = document.getElementById(data);
+            event.target.appendChild(item);
+        }
+
+        document.querySelectorAll('.item').forEach(item => {
+            item.addEventListener('dragstart', drag);
+        });
+    </script>
+</body>
+</html>
