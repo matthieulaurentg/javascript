@@ -55,12 +55,6 @@
             background-color: #ccc;
         }
 
-        .piece img {
-            max-width: 80px;
-            max-height: 80px;
-            margin-bottom: 10px;
-        }
-
         #assemble-btn {
             background-color: #4CAF50;
             color: white;
@@ -131,83 +125,67 @@
         <h1>Inventor's Workshop</h1>
         <div id="puzzle-container">
             <label class="piece">
-                <input type="checkbox" value="engine"> 
-                <img src="https://www.svgrepo.com/show/253566/engine.svg" alt="Engine">
+                <input type="checkbox" value="Engine"> 
                 Engine
             </label>
             <label class="piece">
-                <input type="checkbox" value="propeller"> 
-                <img src="https://www.svgrepo.com/show/61068/airplane-propeller.svg" alt="Propeller">
+                <input type="checkbox" value="Propeller"> 
                 Propeller
             </label>
             <label class="piece">
-                <input type="checkbox" value="wheels"> 
-                <img src="https://www.svgrepo.com/show/32409/wheel.svg" alt="Wheels">
+                <input type="checkbox" value="Wheels"> 
                 Wheels
             </label>
             <label class="piece">
-                <input type="checkbox" value="circuit-board"> 
-                <img src="https://www.svgrepo.com/show/11721/circuit-board.svg" alt="Circuit Board">
+                <input type="checkbox" value="Circuit Board"> 
                 Circuit Board
             </label>
             <label class="piece">
-                <input type="checkbox" value="solar-panel"> 
-                <img src="https://www.svgrepo.com/show/23712/solar-panel.svg" alt="Solar Panel">
+                <input type="checkbox" value="Solar Panel"> 
                 Solar Panel
             </label>
             <label class="piece">
-                <input type="checkbox" value="hydraulic-system"> 
-                <img src="https://www.svgrepo.com/show/33765/hydraulic-system.svg" alt="Hydraulic System">
+                <input type="checkbox" value="Hydraulic System"> 
                 Hydraulic System
             </label>
             <label class="piece">
-                <input type="checkbox" value="battery"> 
-                <img src="https://www.svgrepo.com/show/258734/battery.svg" alt="Battery">
+                <input type="checkbox" value="Battery"> 
                 Battery
             </label>
             <label class="piece">
-                <input type="checkbox" value="sensor"> 
-                <img src="https://www.svgrepo.com/show/134474/sensor.svg" alt="Sensor">
+                <input type="checkbox" value="Sensor"> 
                 Sensor
             </label>
             <label class="piece">
-                <input type="checkbox" value="thruster"> 
-                <img src="https://www.svgrepo.com/show/231371/rocket-thruster.svg" alt="Thruster">
+                <input type="checkbox" value="Thruster"> 
                 Thruster
             </label>
             <label class="piece">
-                <input type="checkbox" value="gearbox"> 
-                <img src="https://www.svgrepo.com/show/16211/gearbox.svg" alt="Gearbox">
+                <input type="checkbox" value="Gearbox"> 
                 Gearbox
             </label>
             <label class="piece">
-                <input type="checkbox" value="microcontroller"> 
-                <img src="https://www.svgrepo.com/show/35557/microcontroller.svg" alt="Microcontroller">
+                <input type="checkbox" value="Microcontroller"> 
                 Microcontroller
             </label>
             <label class="piece">
-                <input type="checkbox" value="antenna"> 
-                <img src="https://www.svgrepo.com/show/22510/antenna.svg" alt="Antenna">
+                <input type="checkbox" value="Antenna"> 
                 Antenna
             </label>
             <label class="piece">
-                <input type="checkbox" value="lcd-display"> 
-                <img src="https://www.svgrepo.com/show/195049/lcd.svg" alt="LCD Display">
+                <input type="checkbox" value="LCD Display"> 
                 LCD Display
             </label>
             <label class="piece">
-                <input type="checkbox" value="actuator"> 
-                <img src="https://www.svgrepo.com/show/13142/actuator.svg" alt="Actuator">
+                <input type="checkbox" value="Actuator"> 
                 Actuator
             </label>
             <label class="piece">
-                <input type="checkbox" value="solenoid"> 
-                <img src="https://www.svgrepo.com/show/9365/solenoid.svg" alt="Solenoid">
+                <input type="checkbox" value="Solenoid"> 
                 Solenoid
             </label>
             <label class="piece">
-                <input type="checkbox" value="pump"> 
-                <img src="https://www.svgrepo.com/show/22554/pump.svg" alt="Pump">
+                <input type="checkbox" value="Pump"> 
                 Pump
             </label>
             <!-- Add more pieces as needed -->
@@ -223,21 +201,27 @@
     <script>
         // List of machines and their required components
         const machines = [
-            { name: 'Airplane', components: ['engine', 'propeller', 'wheels'] },
-            { name: 'Car', components: ['engine', 'wheels'] },
-            { name: 'Solar-powered Drone', components: ['engine', 'propeller', 'solar-panel'] },
-            { name: 'Heavy-duty Machine', components: ['engine', 'hydraulic-system'] },
-            { name: 'Robot', components: ['circuit-board', 'battery', 'sensor'] },
-            { name: 'Submarine', components: ['engine', 'propeller', 'battery', 'thruster'] },
-            { name: 'Spacecraft', components: ['engine', 'propeller', 'solar-panel', 'battery'] },
-            { name: 'Rover', components: ['engine', 'wheels', 'battery', 'sensor'] },
-            { name: 'Drone', components: ['propeller', 'battery', 'sensor'] },
-            { name: 'Mechanical Arm', components: ['hydraulic-system', 'gearbox'] },
-            { name: 'Satellite', components: ['solar-panel', 'antenna', 'microcontroller'] },
-            { name: 'Smartphone', components: ['microcontroller', 'lcd-display', 'battery'] },
-            { name: 'Industrial Robot', components: ['microcontroller', 'actuator', 'solenoid'] },
-            { name: 'Electric Bicycle', components: ['battery', 'motor', 'lcd-display'] },
-            { name: 'Water Pump System', components: ['pump', 'solenoid', 'microcontroller'] }
+            { name: 'Airplane', components: ['Engine', 'Propeller', 'Wheels'] },
+            { name: 'Car', components: ['Engine', 'Wheels'] },
+            { name: 'Solar-powered Drone', components: ['Engine', 'Propeller', 'Solar Panel'] },
+            { name: 'Heavy-duty Machine', components: ['Engine', 'Hydraulic System'] },
+            { name: 'Robot', components: ['Circuit Board', 'Battery', 'Sensor'] },
+            { name: 'Submarine', components: ['Engine', 'Propeller', 'Battery', 'Thruster'] },
+            { name: 'Spacecraft', components: ['Engine', 'Propeller', 'Solar Panel', 'Battery'] },
+            { name: 'Rover', components: ['Engine', 'Wheels', 'Battery', 'Sensor'] },
+            { name: 'Drone', components: ['Propeller', 'Battery', 'Sensor'] },
+            { name: 'Mechanical Arm', components: ['Hydraulic System', 'Gearbox'] },
+            { name: 'Satellite', components: ['Solar Panel', 'Antenna', 'Microcontroller'] },
+            { name: 'Smartphone', components: ['Microcontroller', 'LCD Display', 'Battery'] },
+            { name: 'Industrial Robot', components: ['Microcontroller', 'Actuator', 'Solenoid'] },
+            { name: 'Electric Bicycle', components: ['Battery', 'Wheels', 'LCD Display'] },
+            { name: 'Weather Station', components: ['Antenna', 'Microcontroller', 'Sensor'] },
+            { name: 'Medical Scanner', components: ['Microcontroller', 'Sensor', 'LCD Display'] },
+            { name: 'Security System', components: ['Microcontroller', 'Sensor', 'Solenoid'] },
+            { name: 'Drone Delivery System', components: ['Propeller', 'Battery', 'Antenna', 'Microcontroller'] },
+            { name: 'Smart Home Controller', components: ['Microcontroller', 'Sensor', 'Actuator'] },
+            { name: 'Virtual Reality Headset', components: ['LCD Display', 'Microcontroller', 'Sensor'] },
+            { name: 'Aquaponics System', components: ['Pump', 'Microcontroller', 'Sensor'] }
             // Add more machines as needed
         ];
 
