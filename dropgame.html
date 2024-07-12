@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drag and Drop Game</title>
+    <title>Drag and Drop Game with Timer</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -45,10 +45,16 @@
             background-color: #fff;
             color: #000;
         }
+
+        #timer {
+            font-size: 24px;
+            margin: 20px;
+        }
     </style>
 </head>
 <body>
-    <h1>Drag and Drop Game</h1>
+    <h1>Drag and Drop Game with Timer</h1>
+    <div id="timer">Time left: <span id="time">30</span> seconds</div>
     <div id="items">
         <div class="item" draggable="true" id="item1">Item 1</div>
         <div class="item" draggable="true" id="item2">Item 2</div>
@@ -76,6 +82,25 @@
         document.querySelectorAll('.item').forEach(item => {
             item.addEventListener('dragstart', drag);
         });
+
+        var timeLeft = 30; // Set the timer duration in seconds
+        var timerElement = document.getElementById('time');
+
+        function updateTimer() {
+            if (timeLeft > 0) {
+                timeLeft--;
+                timerElement.textContent = timeLeft;
+            } else {
+                alert("Time's up! Game over.");
+                clearInterval(timerInterval);
+                // Optionally disable dragging after time is up
+                document.querySelectorAll('.item').forEach(item => {
+                    item.setAttribute('draggable', 'false');
+                });
+            }
+        }
+
+        var timerInterval = setInterval(updateTimer, 1000);
     </script>
 </body>
 </html>
