@@ -157,6 +157,16 @@
                 <img src="hydraulic-system.png" alt="Hydraulic System">
                 Hydraulic System
             </label>
+            <label class="piece">
+                <input type="checkbox" value="Battery"> 
+                <img src="battery.png" alt="Battery">
+                Battery
+            </label>
+            <label class="piece">
+                <input type="checkbox" value="Sensor"> 
+                <img src="sensor.png" alt="Sensor">
+                Sensor
+            </label>
             <!-- Add more pieces as needed -->
         </div>
         <button id="assemble-btn" onclick="assembleMachine()">Assemble Machine</button>
@@ -173,7 +183,10 @@
             { name: 'Airplane', components: ['Engine', 'Propeller', 'Wheels'] },
             { name: 'Car', components: ['Engine', 'Wheels'] },
             { name: 'Solar-powered Drone', components: ['Engine', 'Propeller', 'Solar Panel'] },
-            { name: 'Heavy-duty Machine', components: ['Engine', 'Hydraulic System'] }
+            { name: 'Heavy-duty Machine', components: ['Engine', 'Hydraulic System'] },
+            { name: 'Robot', components: ['Circuit Board', 'Battery', 'Sensor'] },
+            { name: 'Submarine', components: ['Engine', 'Propeller', 'Battery'] },
+            { name: 'Spacecraft', components: ['Engine', 'Propeller', 'Solar Panel', 'Battery'] }
         ];
 
         // Array to store player's inventions
