@@ -288,11 +288,17 @@
             }
 
             if (matchedMachine) {
-                result = `You successfully created a ${matchedMachine.name}!`;
-                // Add the invention to the list
-                inventions.push(matchedMachine);
-                saveProgress(); // Save progress after creating an invention
-                checkAchievements(); // Check for new achievements
+                // Check if the invention has already been created
+                const existingInvention = inventions.find(inv => inv.name === matchedMachine.name);
+                if (existingInvention) {
+                    result = `You've already created a ${matchedMachine.name}.`;
+                } else {
+                    result = `You successfully created a ${matchedMachine.name}!`;
+                    // Add the invention to the list
+                    inventions.push(matchedMachine);
+                    saveProgress(); // Save progress after creating an invention
+                    checkAchievements(); // Check for new achievements
+                }
             } else {
                 result = 'Machine could not be assembled. Invalid combination or missing components.';
             }
