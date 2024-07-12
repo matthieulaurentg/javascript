@@ -77,29 +77,6 @@
             background-color: #45a049;
         }
 
-        #machine-list {
-            margin-top: 20px;
-            text-align: left;
-        }
-
-        #machine-list h3 {
-            margin-bottom: 10px;
-        }
-
-        #machine-list ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        #machine-list li {
-            margin-bottom: 5px;
-        }
-
-        #machine-result {
-            margin-top: 20px;
-        }
-
-        /* Inventions GUI styles */
         #inventions-container {
             display: none;
             margin-top: 20px;
@@ -184,20 +161,10 @@
         </div>
         <button id="assemble-btn" onclick="assembleMachine()">Assemble Machine</button>
         <button id="show-inventions-btn" onclick="toggleInventions()">Show My Inventions</button>
-        <div id="machine-list">
-            <h3>Machines to Create:</h3>
-            <ul>
-                <li>Airplane: Engine, Propeller, Wheels</li>
-                <li>Car: Engine, Wheels</li>
-                <li>Solar-powered Drone: Engine, Propeller, Solar Panel</li>
-                <li>Heavy-duty Machine: Engine, Hydraulic System</li>
-            </ul>
-        </div>
         <div id="inventions-container">
             <h3>My Inventions:</h3>
             <div id="inventions-list"></div>
         </div>
-        <div id="machine-result"></div>
     </div>
 
     <script>
@@ -242,7 +209,7 @@
                 result = 'Machine could not be assembled. Invalid combination or missing components.';
             }
 
-            document.getElementById('machine-result').textContent = result;
+            alert(result); // Display result in an alert (temporary)
         }
 
         // Function to toggle inventions GUI visibility
