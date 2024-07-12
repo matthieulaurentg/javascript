@@ -167,6 +167,16 @@
                 <img src="sensor.png" alt="Sensor">
                 Sensor
             </label>
+            <label class="piece">
+                <input type="checkbox" value="Thruster"> 
+                <img src="thruster.png" alt="Thruster">
+                Thruster
+            </label>
+            <label class="piece">
+                <input type="checkbox" value="Gearbox"> 
+                <img src="gearbox.png" alt="Gearbox">
+                Gearbox
+            </label>
             <!-- Add more pieces as needed -->
         </div>
         <button id="assemble-btn" onclick="assembleMachine()">Assemble Machine</button>
@@ -185,8 +195,12 @@
             { name: 'Solar-powered Drone', components: ['Engine', 'Propeller', 'Solar Panel'] },
             { name: 'Heavy-duty Machine', components: ['Engine', 'Hydraulic System'] },
             { name: 'Robot', components: ['Circuit Board', 'Battery', 'Sensor'] },
-            { name: 'Submarine', components: ['Engine', 'Propeller', 'Battery'] },
-            { name: 'Spacecraft', components: ['Engine', 'Propeller', 'Solar Panel', 'Battery'] }
+            { name: 'Submarine', components: ['Engine', 'Propeller', 'Battery', 'Thruster'] },
+            { name: 'Spacecraft', components: ['Engine', 'Propeller', 'Solar Panel', 'Battery'] },
+            { name: 'Rover', components: ['Engine', 'Wheels', 'Battery', 'Sensor'] },
+            { name: 'Drone', components: ['Propeller', 'Battery', 'Sensor'] },
+            { name: 'Mechanical Arm', components: ['Hydraulic System', 'Gearbox'] }
+            // Add more machines as needed
         ];
 
         // Array to store player's inventions
