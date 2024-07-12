@@ -77,6 +77,24 @@
             background-color: #45a049;
         }
 
+        #machine-list {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        #machine-list h3 {
+            margin-bottom: 10px;
+        }
+
+        #machine-list ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #machine-list li {
+            margin-bottom: 5px;
+        }
+
         #machine-result {
             margin-top: 20px;
         }
@@ -119,10 +137,27 @@
             <!-- Add more pieces as needed -->
         </div>
         <button id="assemble-btn" onclick="assembleMachine()">Assemble Machine</button>
+        <div id="machine-list">
+            <h3>Machines to Create:</h3>
+            <ul>
+                <li>Airplane: Engine, Propeller, Wheels</li>
+                <li>Car: Engine, Wheels</li>
+                <li>Solar-powered Drone: Engine, Propeller, Solar Panel</li>
+                <li>Heavy-duty Machine: Engine, Hydraulic System</li>
+            </ul>
+        </div>
         <div id="machine-result"></div>
     </div>
 
     <script>
+        // List of machines and their required components
+        const machines = [
+            { name: 'Airplane', components: ['Engine', 'Propeller', 'Wheels'] },
+            { name: 'Car', components: ['Engine', 'Wheels'] },
+            { name: 'Solar-powered Drone', components: ['Engine', 'Propeller', 'Solar Panel'] },
+            { name: 'Heavy-duty Machine', components: ['Engine', 'Hydraulic System'] }
+        ];
+
         // Function to assemble the machine
         function assembleMachine() {
             const checkboxes = document.querySelectorAll('#puzzle-container input[type="checkbox"]:checked');
@@ -133,18 +168,22 @@
                 return;
             }
 
-            // Basic evaluation example (modify as needed)
+            // Check if the selected pieces match any machine in the list
             let result = '';
-            if (selectedPieces.includes('Engine') && selectedPieces.includes('Propeller') && selectedPieces.includes('Wheels')) {
-                result = 'You created an airplane!';
-            } else if (selectedPieces.includes('Engine') && selectedPieces.includes('Wheels')) {
-                result = 'You created a car!';
-            } else if (selectedPieces.includes('Engine') && selectedPieces.includes('Propeller') && selectedPieces.includes('Solar Panel')) {
-                result = 'You created a solar-powered drone!';
-            } else if (selectedPieces.includes('Engine') && selectedPieces.includes('Hydraulic System')) {
-                result = 'You created a heavy-duty machine!';
+            let matchedMachine = null;
+
+            for (let machine of machines) {
+                if (selectedPieces.length === machine.components.length &&
+                    machine.components.every(component => selectedPieces.includes(component))) {
+                    matchedMachine = machine;
+                    break;
+                }
+            }
+
+            if (matchedMachine) {
+                result = `You successfully created a ${matchedMachine.name}!`;
             } else {
-                result = 'Machine could not be assembled. Missing components or invalid combination.';
+                result = 'Machine could not be assembled. Invalid combination or missing components.';
             }
 
             document.getElementById('machine-result').textContent = result;
