@@ -169,20 +169,34 @@
         }
 
         function updateLeaderboard(name, time) {
-            var leaderboardBody = document.getElementById('leaderboard-body');
-            var newRow = document.createElement('tr');
-
-            var nameCell = document.createElement('td');
-            nameCell.textContent = name;
-
-            var timeCell = document.createElement('td');
-            timeCell.textContent = time;
-
-            newRow.appendChild(nameCell);
-            newRow.appendChild(timeCell);
-
-            leaderboardBody.appendChild(newRow);
+            var leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
+            leaderboard.push({ name: name, time: time });
+            localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
+            renderLeaderboard();
         }
+
+        function renderLeaderboard() {
+            var leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
+            var leaderboardBody = document.getElementById('leaderboard-body');
+            leaderboardBody.innerHTML = '';
+
+            leaderboard.forEach(entry => {
+                var newRow = document.createElement('tr');
+                var nameCell = document.createElement('td');
+                nameCell.textContent = entry.name;
+
+                var timeCell = document.createElement('td');
+                timeCell.textContent = entry.time;
+
+                newRow.appendChild(nameCell);
+                newRow.appendChild(timeCell);
+
+                leaderboardBody.appendChild(newRow);
+            });
+        }
+
+        // Render the leaderboard on page load
+        renderLeaderboard();
     </script>
 </body>
 </html>
