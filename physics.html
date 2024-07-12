@@ -47,6 +47,7 @@
         let velocityX = 0;
         let velocityY = 0;
         const gravity = 0.6;
+        const bounceFactor = 0.7; // Energy loss on bounce
         const friction = 0.99;
 
         ball.addEventListener('mousedown', (e) => {
@@ -73,31 +74,31 @@
         function updatePhysics() {
             if (!isDragging) {
                 velocityY += gravity;
+                velocityX *= friction;
+                velocityY *= friction;
 
                 let newX = ball.offsetLeft + velocityX;
                 let newY = ball.offsetTop + velocityY;
 
+                // Collision with the container walls
                 if (newX + ball.offsetWidth > container.clientWidth) {
                     newX = container.clientWidth - ball.offsetWidth;
-                    velocityX *= -0.9; // Adding some loss of energy on bounce
+                    velocityX *= -bounceFactor;
                 } else if (newX < 0) {
                     newX = 0;
-                    velocityX *= -0.9; // Adding some loss of energy on bounce
+                    velocityX *= -bounceFactor;
                 }
 
                 if (newY + ball.offsetHeight > container.clientHeight) {
                     newY = container.clientHeight - ball.offsetHeight;
-                    velocityY *= -0.9; // Adding some loss of energy on bounce
+                    velocityY *= -bounceFactor;
                 } else if (newY < 0) {
                     newY = 0;
-                    velocityY *= -0.9; // Adding some loss of energy on bounce
+                    velocityY *= -bounceFactor;
                 }
 
                 ball.style.left = `${newX}px`;
                 ball.style.top = `${newY}px`;
-
-                velocityX *= friction;
-                velocityY *= friction;
             }
             requestAnimationFrame(updatePhysics);
         }
