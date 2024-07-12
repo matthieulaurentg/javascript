@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventor's Workshop</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 28px;
+            color: #333;
+        }
+
+        #game-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #puzzle-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .piece {
+            width: 80px;
+            height: 80px;
+            background-color: #ddd;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        #assemble-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        #assemble-btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <h1>Inventor's Workshop</h1>
+        <div id="puzzle-container">
+            <div class="piece" onclick="selectPiece('Engine')">Engine</div>
+            <div class="piece" onclick="selectPiece('Material')">Material</div>
+            <div class="piece" onclick="selectPiece('Gear')">Gear</div>
+            <!-- Add more pieces as needed -->
+        </div>
+        <button id="assemble-btn" onclick="assembleMachine()">Assemble Machine</button>
+        <div id="machine-result"></div>
+    </div>
+
+    <script>
+        let selectedPieces = [];
+
+        // Function to select a puzzle piece
+        function selectPiece(pieceName) {
+            selectedPieces.push(pieceName);
+            document.getElementById('puzzle-container').innerHTML = ''; // Clear puzzle pieces
+            selectedPieces.forEach(piece => {
+                const pieceElement = document.createElement('div');
+                pieceElement.classList.add('piece', 'selected');
+                pieceElement.textContent = piece;
+                document.getElementById('puzzle-container').appendChild(pieceElement);
+            });
+        }
+
+        // Function to assemble the machine
+        function assembleMachine() {
+            if (selectedPieces.length === 0) {
+                alert('Select at least one piece to assemble the machine.');
+                return;
+            }
+
+            // Basic evaluation example (modify as needed)
+            let result = '';
+            if (selectedPieces.includes('Engine') && selectedPieces.includes('Material')) {
+                result = 'Machine successfully assembled!';
+            } else {
+                result = 'Machine could not be assembled. Missing components.';
+            }
+
+            document.getElementById('machine-result').textContent = result;
+        }
+    </script>
+</body>
+</html>
