@@ -74,32 +74,6 @@
             background-color: #45a049;
         }
 
-        #inventions-container {
-            display: none;
-            margin-top: 20px;
-            text-align: left;
-        }
-
-        .invention {
-            border: 1px solid #ccc;
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-        }
-
-        .invention h4 {
-            margin-bottom: 5px;
-        }
-
-        .invention ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        .invention li {
-            margin-bottom: 3px;
-        }
-
         #show-inventions-btn {
             background-color: #008CBA;
             color: white;
@@ -117,6 +91,26 @@
 
         #show-inventions-btn:hover {
             background-color: #005b7f;
+        }
+
+        #achievements-container {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .achievement {
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .achievement h4 {
+            margin-bottom: 5px;
+        }
+
+        .achievement p {
+            margin-bottom: 5px;
         }
     </style>
 </head>
@@ -220,6 +214,10 @@
             <h3>My Inventions:</h3>
             <div id="inventions-list"></div>
         </div>
+        <div id="achievements-container">
+            <h3>Achievements:</h3>
+            <div id="achievements-list"></div>
+        </div>
     </div>
 
     <script>
@@ -255,6 +253,15 @@
             // Add more machines as needed
         ];
 
+        // Achievements milestones
+        const achievements = [
+            { name: 'First Invention', target: 1 },
+            { name: 'Amateur Inventor', target: 5 },
+            { name: 'Advanced Inventor', target: 10 },
+            { name: 'Master Inventor', target: 20 }
+            // Add more achievements as needed
+        ];
+
         // Array to store player's inventions
         let inventions = [];
 
@@ -285,6 +292,7 @@
                 // Add the invention to the list
                 inventions.push(matchedMachine);
                 saveProgress(); // Save progress after creating an invention
+                checkAchievements(); // Check for new achievements
             } else {
                 result = 'Machine could not be assembled. Invalid combination or missing components.';
             }
@@ -303,6 +311,7 @@
             if (savedInventions) {
                 inventions = JSON.parse(savedInventions);
                 showInventions(); // Display loaded inventions
+                checkAchievements(); // Check achievements when loading progress
             }
         }
 
@@ -339,6 +348,39 @@
                 inventionDiv.appendChild(componentsList);
                 inventionsList.appendChild(inventionDiv);
             });
+        }
+
+        // Function to check achievements
+        function checkAchievements() {
+            const achievementsList = document.getElementById('achievements-list');
+            achievementsList.innerHTML = '';
+
+            achievements.forEach((achievement, index) => {
+                if (inventions.length >= achievement.target) {
+                    const achievementDiv = document.createElement('div');
+                    achievementDiv.classList.add('achievement');
+                    const title = document.createElement('h4');
+                    title.textContent = `${achievement.name}`;
+                    const progress = document.createElement('p');
+                    progress.textContent = `Achievement unlocked: ${achievement.target} inventions`;
+                    achievementDiv.appendChild(title);
+                    achievementDiv.appendChild(progress);
+                    achievementsList.appendChild(achievementDiv);
+                }
+            });
+
+            // Check if all achievements are unlocked
+            if (inventions.length >= achievements[achievements.length - 1].target) {
+                const achievementDiv = document.createElement('div');
+                achievementDiv.classList.add('achievement');
+                const title = document.createElement('h4');
+                title.textContent = `The End?`;
+                const progress = document.createElement('p');
+                progress.textContent = `Congratulations! You've unlocked all achievements.`;
+                achievementDiv.appendChild(title);
+                achievementDiv.appendChild(progress);
+                achievementsList.appendChild(achievementDiv);
+            }
         }
 
         // Load saved progress when the page loads
