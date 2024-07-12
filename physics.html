@@ -79,14 +79,20 @@
                 let newX = ball.offsetLeft + velocityX;
                 let newY = ball.offsetTop + velocityY;
 
-                if (newX + ball.offsetWidth > container.clientWidth || newX < 0) {
+                if (newX + ball.offsetWidth > container.clientWidth) {
+                    newX = container.clientWidth - ball.offsetWidth;
                     velocityX *= -1;
-                    newX = newX < 0 ? 0 : container.clientWidth - ball.offsetWidth;
+                } else if (newX < 0) {
+                    newX = 0;
+                    velocityX *= -1;
                 }
 
-                if (newY + ball.offsetHeight > container.clientHeight || newY < 0) {
+                if (newY + ball.offsetHeight > container.clientHeight) {
+                    newY = container.clientHeight - ball.offsetHeight;
                     velocityY *= -1;
-                    newY = newY < 0 ? 0 : container.clientHeight - ball.offsetHeight;
+                } else if (newY < 0) {
+                    newY = 0;
+                    velocityY *= -1;
                 }
 
                 ball.style.left = `${newX}px`;
