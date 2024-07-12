@@ -7,6 +7,7 @@
     <style>
         body {
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
@@ -25,12 +26,38 @@
             font-size: 24px;
             margin-bottom: 10px;
         }
+        #controls {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .control-button {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 10px;
+            margin: 5px;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        @media (max-width: 600px) {
+            #controls {
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
 <body>
     <div id="game-container">
         <div id="score">Score: <span id="score-value">0</span></div>
         <canvas id="tetris-board" width="240" height="400"></canvas>
+        <div id="controls">
+            <button class="control-button" id="left">Left</button>
+            <button class="control-button" id="rotate">Rotate</button>
+            <button class="control-button" id="right">Right</button>
+            <button class="control-button" id="down">Down</button>
+        </div>
     </div>
 
     <script>
@@ -193,6 +220,26 @@
                     update();
                     break;
             }
+            draw();
+        });
+
+        document.getElementById('left').addEventListener('click', () => {
+            moveHorizontal(-1);
+            draw();
+        });
+
+        document.getElementById('right').addEventListener('click', () => {
+            moveHorizontal(1);
+            draw();
+        });
+
+        document.getElementById('rotate').addEventListener('click', () => {
+            rotate();
+            draw();
+        });
+
+        document.getElementById('down').addEventListener('click', () => {
+            update();
             draw();
         });
 
