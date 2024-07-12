@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drag and Drop Game with Timer</title>
+    <title>Drag and Drop Game with Timer and Multiple Drop Zones</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -17,6 +17,11 @@
 
         h1 {
             margin-top: 20px;
+        }
+
+        #timer {
+            font-size: 24px;
+            margin: 20px;
         }
 
         #items {
@@ -35,33 +40,37 @@
             margin: 0 10px;
         }
 
-        #box {
-            width: 300px;
-            height: 300px;
+        .drop-box {
+            width: 150px;
+            height: 150px;
             border: 2px dashed #000;
             display: flex;
             justify-content: center;
             align-items: center;
             background-color: #fff;
             color: #000;
+            margin: 10px;
         }
 
-        #timer {
-            font-size: 24px;
-            margin: 20px;
+        #boxes {
+            display: flex;
+            justify-content: space-around;
+            width: 80%;
         }
     </style>
 </head>
 <body>
-    <h1>Drag and Drop Game with Timer</h1>
+    <h1>Drag and Drop Game with Timer and Multiple Drop Zones</h1>
     <div id="timer">Time left: <span id="time">30</span> seconds</div>
     <div id="items">
         <div class="item" draggable="true" id="item1">Item 1</div>
         <div class="item" draggable="true" id="item2">Item 2</div>
         <div class="item" draggable="true" id="item3">Item 3</div>
     </div>
-    <div id="box" ondrop="drop(event)" ondragover="allowDrop(event)">
-        <p>Drop items here</p>
+    <div id="boxes">
+        <div class="drop-box" ondrop="drop(event)" ondragover="allowDrop(event)" data-correct-item="item1">Box 1</div>
+        <div class="drop-box" ondrop="drop(event)" ondragover="allowDrop(event)" data-correct-item="item2">Box 2</div>
+        <div class="drop-box" ondrop="drop(event)" ondragover="allowDrop(event)" data-correct-item="item3">Box 3</div>
     </div>
     <script>
         function allowDrop(event) {
@@ -76,7 +85,17 @@
             event.preventDefault();
             var data = event.dataTransfer.getData("text");
             var item = document.getElementById(data);
-            event.target.appendChild(item);
+            var correctItem = event.target.getAttribute('data-correct-item');
+
+            if (data === correctItem) {
+                event.target.appendChild(item);
+            } else {
+                alert("Wrong item! Game over.");
+                clearInterval(timerInterval);
+                document.querySelectorAll('.item').forEach(item => {
+                    item.setAttribute('draggable', 'false');
+                });
+            }
         }
 
         document.querySelectorAll('.item').forEach(item => {
@@ -93,7 +112,6 @@
             } else {
                 alert("Time's up! Game over.");
                 clearInterval(timerInterval);
-                // Optionally disable dragging after time is up
                 document.querySelectorAll('.item').forEach(item => {
                     item.setAttribute('draggable', 'false');
                 });
