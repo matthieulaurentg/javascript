@@ -254,11 +254,26 @@
                 result = `You successfully created a ${matchedMachine.name}!`;
                 // Add the invention to the list
                 inventions.push(matchedMachine);
+                saveProgress(); // Save progress after creating an invention
             } else {
                 result = 'Machine could not be assembled. Invalid combination or missing components.';
             }
 
             alert(result); // Display result in an alert (temporary)
+        }
+
+        // Function to save player's progress (inventions) to localStorage
+        function saveProgress() {
+            localStorage.setItem('inventions', JSON.stringify(inventions));
+        }
+
+        // Function to load player's saved inventions from localStorage
+        function loadProgress() {
+            const savedInventions = localStorage.getItem('inventions');
+            if (savedInventions) {
+                inventions = JSON.parse(savedInventions);
+                showInventions(); // Display loaded inventions
+            }
         }
 
         // Function to toggle inventions GUI visibility
@@ -295,6 +310,11 @@
                 inventionsList.appendChild(inventionDiv);
             });
         }
+
+        // Load saved progress when the page loads
+        window.onload = function() {
+            loadProgress();
+        };
     </script>
 </body>
 </html>
