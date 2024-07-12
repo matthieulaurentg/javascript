@@ -28,19 +28,34 @@
 
         #puzzle-container {
             display: flex;
+            flex-wrap: wrap;
             justify-content: center;
             gap: 10px;
             margin-bottom: 20px;
         }
 
         .piece {
-            width: 80px;
-            height: 80px;
+            width: 120px;
+            height: 120px;
             background-color: #ddd;
             border-radius: 8px;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
+            cursor: pointer;
+            padding: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .piece:hover {
+            background-color: #ccc;
+        }
+
+        .piece img {
+            max-width: 80px;
+            max-height: 80px;
+            margin-bottom: 10px;
         }
 
         #assemble-btn {
@@ -72,13 +87,34 @@
         <h1>Inventor's Workshop</h1>
         <div id="puzzle-container">
             <label class="piece">
-                <input type="checkbox" value="Engine"> Engine
+                <input type="checkbox" value="Engine"> 
+                <img src="engine.png" alt="Engine">
+                Engine
             </label>
             <label class="piece">
-                <input type="checkbox" value="Material"> Material
+                <input type="checkbox" value="Propeller"> 
+                <img src="propeller.png" alt="Propeller">
+                Propeller
             </label>
             <label class="piece">
-                <input type="checkbox" value="Gear"> Gear
+                <input type="checkbox" value="Wheels"> 
+                <img src="wheels.png" alt="Wheels">
+                Wheels
+            </label>
+            <label class="piece">
+                <input type="checkbox" value="Circuit Board"> 
+                <img src="circuit-board.png" alt="Circuit Board">
+                Circuit Board
+            </label>
+            <label class="piece">
+                <input type="checkbox" value="Solar Panel"> 
+                <img src="solar-panel.png" alt="Solar Panel">
+                Solar Panel
+            </label>
+            <label class="piece">
+                <input type="checkbox" value="Hydraulic System"> 
+                <img src="hydraulic-system.png" alt="Hydraulic System">
+                Hydraulic System
             </label>
             <!-- Add more pieces as needed -->
         </div>
@@ -99,10 +135,16 @@
 
             // Basic evaluation example (modify as needed)
             let result = '';
-            if (selectedPieces.includes('Engine') && selectedPieces.includes('Material')) {
-                result = 'Machine successfully assembled!';
+            if (selectedPieces.includes('Engine') && selectedPieces.includes('Propeller') && selectedPieces.includes('Wheels')) {
+                result = 'You created an airplane!';
+            } else if (selectedPieces.includes('Engine') && selectedPieces.includes('Wheels')) {
+                result = 'You created a car!';
+            } else if (selectedPieces.includes('Engine') && selectedPieces.includes('Propeller') && selectedPieces.includes('Solar Panel')) {
+                result = 'You created a solar-powered drone!';
+            } else if (selectedPieces.includes('Engine') && selectedPieces.includes('Hydraulic System')) {
+                result = 'You created a heavy-duty machine!';
             } else {
-                result = 'Machine could not be assembled. Missing components.';
+                result = 'Machine could not be assembled. Missing components or invalid combination.';
             }
 
             document.getElementById('machine-result').textContent = result;
