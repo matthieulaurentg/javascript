@@ -41,7 +41,6 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            cursor: pointer;
         }
 
         #assemble-btn {
@@ -62,15 +61,25 @@
         #assemble-btn:hover {
             background-color: #45a049;
         }
+
+        #machine-result {
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
     <div id="game-container">
         <h1>Inventor's Workshop</h1>
         <div id="puzzle-container">
-            <div class="piece" onclick="selectPiece('Engine')">Engine</div>
-            <div class="piece" onclick="selectPiece('Material')">Material</div>
-            <div class="piece" onclick="selectPiece('Gear')">Gear</div>
+            <label class="piece">
+                <input type="checkbox" value="Engine"> Engine
+            </label>
+            <label class="piece">
+                <input type="checkbox" value="Material"> Material
+            </label>
+            <label class="piece">
+                <input type="checkbox" value="Gear"> Gear
+            </label>
             <!-- Add more pieces as needed -->
         </div>
         <button id="assemble-btn" onclick="assembleMachine()">Assemble Machine</button>
@@ -78,22 +87,11 @@
     </div>
 
     <script>
-        let selectedPieces = [];
-
-        // Function to select a puzzle piece
-        function selectPiece(pieceName) {
-            selectedPieces.push(pieceName);
-            document.getElementById('puzzle-container').innerHTML = ''; // Clear puzzle pieces
-            selectedPieces.forEach(piece => {
-                const pieceElement = document.createElement('div');
-                pieceElement.classList.add('piece', 'selected');
-                pieceElement.textContent = piece;
-                document.getElementById('puzzle-container').appendChild(pieceElement);
-            });
-        }
-
         // Function to assemble the machine
         function assembleMachine() {
+            const checkboxes = document.querySelectorAll('#puzzle-container input[type="checkbox"]:checked');
+            const selectedPieces = Array.from(checkboxes).map(checkbox => checkbox.value);
+
             if (selectedPieces.length === 0) {
                 alert('Select at least one piece to assemble the machine.');
                 return;
