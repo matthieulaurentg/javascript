@@ -1,376 +1,322 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tycoon Game</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin-top: 50px;
+document.addEventListener('DOMContentLoaded', (event) => {
+    let money = 0;
+    let moneyPerClick = 1;
+    let autoCollect = 0;
+    let multiplier = 1;
+    let floorsIncome = 0;
+    let autoCollectInterval;
+    let monthlyTaxInterval;
+    let yearlyTaxInterval;
+    let floors = 0;
+    let arcadeBought = false;
+    let quizBought = false;
+    let arcadeScore = 0;
+    let quizQuestions = [
+        { question: "What is the capital of France?", answers: ["Paris", "London", "Rome"], correct: 0 },
+        { question: "What is 2 + 2?", answers: ["3", "4", "5"], correct: 1 },
+        { question: "Who wrote 'Hamlet'?", answers: ["Dickens", "Shakespeare", "Austen"], correct: 1 },
+        { question: "Which planet is known as the Red Planet?", answers: ["Mars", "Jupiter", "Saturn"], correct: 0 },
+        { question: "Who painted the Mona Lisa?", answers: ["Van Gogh", "Michelangelo", "Leonardo da Vinci"], correct: 2 },
+        { question: "What is the smallest bone in the human body?", answers: ["Femur", "Stapes", "Patella"], correct: 1 },
+        { question: "What is the largest mammal in the world?", answers: ["Elephant", "Blue Whale", "Giraffe"], correct: 1 },
+        { question: "Which country is known as the Land of the Rising Sun?", answers: ["China", "Japan", "Korea"], correct: 1 },
+        { question: "What is the capital of Australia?", answers: ["Sydney", "Melbourne", "Canberra"], correct: 2 }
+    ];
+
+    const moneyDisplay = document.getElementById('money');
+    const collectButton = document.getElementById('collect');
+    const saveButton = document.getElementById('save');
+    const loadButton = document.getElementById('load');
+    const collectUpgrade1Button = document.getElementById('collectUpgrade1');
+    const collectUpgrade2Button = document.getElementById('collectUpgrade2');
+    const autoCollectUpgrade1Button = document.getElementById('autoCollectUpgrade1');
+    const autoCollectUpgrade2Button = document.getElementById('autoCollectUpgrade2');
+    const multiplierUpgrade1Button = document.getElementById('multiplierUpgrade1');
+    const multiplierUpgrade2Button = document.getElementById('multiplierUpgrade2');
+    const floor1Button = document.getElementById('floor1');
+    const floor2Button = document.getElementById('floor2');
+    const arcadeButton = document.getElementById('arcade');
+    const quizButton = document.getElementById('quiz');
+    const arcadeGameDiv = document.getElementById('arcade-game');
+    const startGameButton = document.getElementById('startGame');
+    const arcadeClickButton = document.getElementById('arcadeClick');
+    const closeArcadeButton = document.getElementById('closeArcade');
+    const quizGameDiv = document.getElementById('quiz-game');
+    const questionDisplay = document.getElementById('question');
+    const answerButtons = document.querySelectorAll('.answer');
+    const closeQuizButton = document.getElementById('closeQuiz');
+    const arcadeScoreDisplay = document.getElementById('arcadeScore');
+
+    function updateMoneyDisplay() {
+        moneyDisplay.textContent = money;
+    }
+
+    function startAutoCollect() {
+        if (autoCollectInterval) clearInterval(autoCollectInterval);
+        autoCollectInterval = setInterval(() => {
+            money += (autoCollect + floorsIncome) * multiplier;
+            updateMoneyDisplay();
+        }, 1000);
+    }
+
+    function startTaxIntervals() {
+        if (monthlyTaxInterval) clearInterval(monthlyTaxInterval);
+        if (yearlyTaxInterval) clearInterval(yearlyTaxInterval);
+        
+        monthlyTaxInterval = setInterval(() => {
+            const monthlyTax = money * 0.05; // 5% monthly tax
+            money -= monthlyTax;
+            updateMoneyDisplay();
+            alert(`Monthly tax deducted: ${monthlyTax.toFixed(2)}`);
+        }, 60000); // 1 minute for simplicity
+
+        yearlyTaxInterval = setInterval(() => {
+            const yearlyTax = money * 0.20; // 20% yearly tax
+            money -= yearlyTax;
+            updateMoneyDisplay();
+            alert(`Yearly tax deducted: ${yearlyTax.toFixed(2)}`);
+        }, 3600000); // 1 hour for simplicity
+    }
+
+    function randomizeQuizQuestions() {
+        // Fisher-Yates shuffle algorithm
+        for (let i = quizQuestions.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [quizQuestions[i], quizQuestions[j]] = [quizQuestions[j], quizQuestions[i]];
         }
+    }
 
-        button {
-            padding: 10px 20px;
-            margin: 5px;
-            font-size: 16px;
-        }
-
-        .upgrade, .floor, .building {
-            margin-top: 20px;
-        }
-
-        #arcade-game, #quiz-game {
-            display: none;
-        }
-    </style>
-</head>
-<body>
-    <div id="game">
-        <h1>Tycoon Game</h1>
-        <p>Money: <span id="money">0</span></p>
-        <button id="collect">Collect Money</button>
-        <br><br>
-        <button id="save">Save Game</button>
-        <button id="load">Load Game</button>
-        <div class="upgrade">
-            <h2>Collect Upgrades</h2>
-            <button id="collectUpgrade1">Collect Upgrade 1 (Cost: 10) - Increase per click by 1</button>
-            <button id="collectUpgrade2">Collect Upgrade 2 (Cost: 50) - Increase per click by 5</button>
-        </div>
-        <div class="upgrade">
-            <h2>Auto Collect Upgrades</h2>
-            <button id="autoCollectUpgrade1">Auto Collect Upgrade 1 (Cost: 100) - Collect 1 per second</button>
-            <button id="autoCollectUpgrade2">Auto Collect Upgrade 2 (Cost: 500) - Collect 5 per second</button>
-        </div>
-        <div class="upgrade">
-            <h2>Multiplier Upgrades</h2>
-            <button id="multiplierUpgrade1">Multiplier Upgrade 1 (Cost: 200) - Increase all collection by 2x</button>
-            <button id="multiplierUpgrade2">Multiplier Upgrade 2 (Cost: 1000) - Increase all collection by 5x</button>
-        </div>
-        <div class="floor">
-            <h2>Floors</h2>
-            <button id="floor1">Buy Floor 1 (Cost: 1000) - Earn 10 per second</button>
-            <button id="floor2">Buy Floor 2 (Cost: 5000) - Earn 50 per second</button>
-        </div>
-        <div class="building">
-            <h2>Buildings</h2>
-            <button id="arcade">Buy Arcade (Cost: 2000) - Play mini-games to earn money</button>
-            <button id="quiz">Buy Quiz (Cost: 3000) - Answer quizzes to earn money</button>
-        </div>
-        <div id="arcade-game">
-            <h3>Arcade Game</h3>
-            <p>Click the button as fast as you can in 10 seconds!</p>
-            <button id="startGame">Start Game</button>
-            <button id="arcadeClick" style="display: none;">Click Me!</button>
-            <button id="closeArcade">Close Arcade</button>
-            <p id="arcadeScore">Score: 0</p>
-        </div>
-        <div id="quiz-game">
-            <h3>Quiz Game</h3>
-            <p id="question">Question will appear here</p>
-            <button class="answer">Answer 1</button>
-            <button class="answer">Answer 2</button>
-            <button class="answer">Answer 3</button>
-            <button id="closeQuiz">Close Quiz</button>
-        </div>
-    </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
-            let money = 0;
-            let moneyPerClick = 1;
-            let autoCollect = 0;
-            let multiplier = 1;
-            let floorsIncome = 0;
-            let autoCollectInterval;
-            let monthlyTaxInterval;
-            let yearlyTaxInterval;
-            let floors = 0;
-            let arcadeBought = false;
-            let quizBought = false;
-            let arcadeScore = 0;
-            let quizQuestions = [
-                { question: "What is the capital of France?", answers: ["Paris", "London", "Rome"], correct: 0 },
-                { question: "What is 2 + 2?", answers: ["3", "4", "5"], correct: 1 },
-                { question: "Who wrote 'Hamlet'?", answers: ["Dickens", "Shakespeare", "Austen"], correct: 1 }
-            ];
-
-            const moneyDisplay = document.getElementById('money');
-            const collectButton = document.getElementById('collect');
-            const saveButton = document.getElementById('save');
-            const loadButton = document.getElementById('load');
-            const collectUpgrade1Button = document.getElementById('collectUpgrade1');
-            const collectUpgrade2Button = document.getElementById('collectUpgrade2');
-            const autoCollectUpgrade1Button = document.getElementById('autoCollectUpgrade1');
-            const autoCollectUpgrade2Button = document.getElementById('autoCollectUpgrade2');
-            const multiplierUpgrade1Button = document.getElementById('multiplierUpgrade1');
-            const multiplierUpgrade2Button = document.getElementById('multiplierUpgrade2');
-            const floor1Button = document.getElementById('floor1');
-            const floor2Button = document.getElementById('floor2');
-            const arcadeButton = document.getElementById('arcade');
-            const quizButton = document.getElementById('quiz');
-            const arcadeGameDiv = document.getElementById('arcade-game');
-            const startGameButton = document.getElementById('startGame');
-            const arcadeClickButton = document.getElementById('arcadeClick');
-            const closeArcadeButton = document.getElementById('closeArcade');
-            const quizGameDiv = document.getElementById('quiz-game');
-            const questionDisplay = document.getElementById('question');
-            const answerButtons = document.querySelectorAll('.answer');
-            const closeQuizButton = document.getElementById('closeQuiz');
-            const arcadeScoreDisplay = document.getElementById('arcadeScore');
-
-            function updateMoneyDisplay() {
-                moneyDisplay.textContent = money;
-            }
-
-            function startAutoCollect() {
-                if (autoCollectInterval) clearInterval(autoCollectInterval);
-                autoCollectInterval = setInterval(() => {
-                    money += (autoCollect + floorsIncome) * multiplier;
+    function randomQuizQuestion() {
+        randomizeQuizQuestions();
+        const question = quizQuestions.pop();
+        questionDisplay.textContent = question.question;
+        answerButtons.forEach((button, index) => {
+            button.textContent = question.answers[index];
+            button.onclick = () => {
+                if (index === question.correct) {
+                    money += 500; // Reward for correct answer
                     updateMoneyDisplay();
-                }, 1000);
-            }
-
-            function startTaxIntervals() {
-                if (monthlyTaxInterval) clearInterval(monthlyTaxInterval);
-                if (yearlyTaxInterval) clearInterval(yearlyTaxInterval);
-                
-                monthlyTaxInterval = setInterval(() => {
-                    const monthlyTax = money * 0.05; // 5% monthly tax
-                    money -= monthlyTax;
-                    updateMoneyDisplay();
-                    alert(`Monthly tax deducted: ${monthlyTax.toFixed(2)}`);
-                }, 60000); // 1 minute for simplicity
-
-                yearlyTaxInterval = setInterval(() => {
-                    const yearlyTax = money * 0.20; // 20% yearly tax
-                    money -= yearlyTax;
-                    updateMoneyDisplay();
-                    alert(`Yearly tax deducted: ${yearlyTax.toFixed(2)}`);
-                }, 3600000); // 1 hour for simplicity
-            }
-
-            function randomQuizQuestion() {
-                const randomIndex = Math.floor(Math.random() * quizQuestions.length);
-                const question = quizQuestions[randomIndex];
-                questionDisplay.textContent = question.question;
-                answerButtons.forEach((button, index) => {
-                    button.textContent = question.answers[index];
-                    button.onclick = () => {
-                        if (index === question.correct) {
-                            money += 500; // Reward for correct answer
-                            updateMoneyDisplay();
-                            alert('Correct! You earned 500 money.');
-                        } else {
-                            alert('Wrong answer. Try again!');
-                        }
-                    };
-                });
-            }
-
-            collectButton.addEventListener('click', () => {
-                money += moneyPerClick * multiplier;
-                updateMoneyDisplay();
-            });
-
-            saveButton.addEventListener('click', () => {
-                const gameState = {
-                    money: money,
-                    moneyPerClick: moneyPerClick,
-                    autoCollect: autoCollect,
-                    multiplier: multiplier,
-                    floorsIncome: floorsIncome,
-                    floors: floors,
-                    arcadeBought: arcadeBought,
-                    quizBought: quizBought
-                };
-                localStorage.setItem('gameState', JSON.stringify(gameState));
-                alert('Game Saved!');
-            });
-
-            loadButton.addEventListener('click', () => {
-                const savedGameState = localStorage.getItem('gameState');
-                if (savedGameState !== null) {
-                    const gameState = JSON.parse(savedGameState);
-                    money = gameState.money;
-                    moneyPerClick = gameState.moneyPerClick;
-                    autoCollect = gameState.autoCollect;
-                    multiplier = gameState.multiplier;
-                    floorsIncome = gameState.floorsIncome;
-                    floors = gameState.floors;
-                    arcadeBought = gameState.arcadeBought;
-                    quizBought = gameState.quizBought;
-                    updateMoneyDisplay();
-                    startAutoCollect();
-                    startTaxIntervals();
-                    if (arcadeBought) {
-                        arcadeButton.style.display = 'none';
-                        arcadeGameDiv.style.display = 'block';
-                    }
-                    if (quizBought) {
-                        quizButton.style.display = 'none';
-                        quizGameDiv.style.display = 'block';
-                    }
-                }
-            });
-
-            collectUpgrade1Button.addEventListener('click', () => {
-                if (money >= 10) {
-                    money -= 10;
-                    moneyPerClick += 1;
-                    updateMoneyDisplay();
+                    alert('Correct! You earned 500 money.');
                 } else {
-                    alert('Not enough money to buy Collect Upgrade 1!');
+                    alert('Wrong answer. Try again!');
                 }
-            });
-
-            collectUpgrade2Button.addEventListener('click', () => {
-                if (money >= 50) {
-                    money -= 50;
-                    moneyPerClick += 5;
-                    updateMoneyDisplay();
-                } else {
-                    alert('Not enough money to buy Collect Upgrade 2!');
+                if (quizQuestions.length === 0) {
+                    quizQuestions = [
+                        { question: "What is the capital of France?", answers: ["Paris", "London", "Rome"], correct: 0 },
+                        { question: "What is 2 + 2?", answers: ["3", "4", "5"], correct: 1 },
+                        { question: "Who wrote 'Hamlet'?", answers: ["Dickens", "Shakespeare", "Austen"], correct: 1 },
+                        { question: "Which planet is known as the Red Planet?", answers: ["Mars", "Jupiter", "Saturn"], correct: 0 },
+                        { question: "Who painted the Mona Lisa?", answers: ["Van Gogh", "Michelangelo", "Leonardo da Vinci"], correct: 2 },
+                        { question: "What is the smallest bone in the human body?", answers: ["Femur", "Stapes", "Patella"], correct: 1 },
+                        { question: "What is the largest mammal in the world?", answers: ["Elephant", "Blue Whale", "Giraffe"], correct: 1 },
+                        { question: "Which country is known as the Land of the Rising Sun?", answers: ["China", "Japan", "Korea"], correct: 1 },
+                        { question: "What is the capital of Australia?", answers: ["Sydney", "Melbourne", "Canberra"], correct: 2 }
+                    ];
                 }
-            });
+                randomizeQuizQuestions();
+            };
+        });
+    }
 
-            autoCollectUpgrade1Button.addEventListener('click', () => {
-                if (money >= 100) {
-                    money -= 100;
-                    autoCollect += 1;
-                    updateMoneyDisplay();
-                    startAutoCollect();
-                } else {
-                    alert('Not enough money to buy Auto Collect Upgrade 1!');
-                }
-            });
+    collectButton.addEventListener('click', () => {
+        money += moneyPerClick * multiplier;
+        updateMoneyDisplay();
+    });
 
-            autoCollectUpgrade2Button.addEventListener('click', () => {
-                if (money >= 500) {
-                    money -= 500;
-                    autoCollect += 5;
-                    updateMoneyDisplay();
-                    startAutoCollect();
-                } else {
-                    alert('Not enough money to buy Auto Collect Upgrade 2!');
-                }
-            });
+    saveButton.addEventListener('click', () => {
+        const gameState = {
+            money: money,
+            moneyPerClick: moneyPerClick,
+            autoCollect: autoCollect,
+            multiplier: multiplier,
+            floorsIncome: floorsIncome,
+            floors: floors,
+            arcadeBought: arcadeBought,
+            quizBought: quizBought
+        };
+        localStorage.setItem('gameState', JSON.stringify(gameState));
+        alert('Game Saved!');
+    });
 
-            multiplierUpgrade1Button.addEventListener('click', () => {
-                if (money >= 200) {
-                    money -= 200;
-                    multiplier *= 2;
-                    updateMoneyDisplay();
-                } else {
-                    alert('Not enough money to buy Multiplier Upgrade 1!');
-                }
-            });
-
-            multiplierUpgrade2Button.addEventListener('click', () => {
-                if (money >= 1000) {
-                    money -= 1000;
-                    multiplier *= 5;
-                    updateMoneyDisplay();
-                } else {
-                    alert('Not enough money to buy Multiplier Upgrade 2!');
-                }
-            });
-
-            floor1Button.addEventListener('click', () => {
-                if (money >= 1000) {
-                    money -= 1000;
-                    floorsIncome += 10;
-                    floors += 1;
-                    updateMoneyDisplay();
-                    startAutoCollect();
-                } else {
-                    alert('Not enough money to buy Floor 1!');
-                }
-            });
-
-            floor2Button.addEventListener('click', () => {
-                if (money >= 5000) {
-                    money -= 5000;
-                    floorsIncome += 50;
-                    floors += 1;
-                    updateMoneyDisplay();
-                    startAutoCollect();
-                } else {
-                    alert('Not enough money to buy Floor 2!');
-                }
-            });
-
-            arcadeButton.addEventListener('click', () => {
-                if (money >= 2000) {
-                    money -= 2000;
-                    arcadeBought = true;
-                    updateMoneyDisplay();
-                    arcadeButton.style.display = 'none';
-                    arcadeGameDiv.style.display = 'block';
-                } else {
-                    alert('Not enough money to buy the Arcade!');
-                }
-            });
-
-            startGameButton.addEventListener('click', () => {
-                arcadeScore = 0;
-                arcadeScoreDisplay.textContent = `Score: ${arcadeScore}`;
-                arcadeClickButton.style.display = 'inline-block';
-                startGameButton.style.display = 'none';
-                const startTime = Date.now();
-                const gameDuration = 10000; // 10 seconds
-
-                const gameInterval = setInterval(() => {
-                    const currentTime = Date.now();
-                    if (currentTime - startTime >= gameDuration) {
-                        clearInterval(gameInterval);
-                        arcadeClickButton.style.display = 'none';
-                        startGameButton.style.display = 'inline-block';
-                        const reward = arcadeScore * 10;
-                        money += reward;
-                        updateMoneyDisplay();
-                        alert(`Game over! You scored ${arcadeScore} and earned ${reward} money!`);
-                    }
-                }, 100);
-
-                arcadeClickButton.onclick = () => {
-                    arcadeScore++;
-                    arcadeScoreDisplay.textContent = `Score: ${arcadeScore}`;
-                };
-            });
-
-            closeArcadeButton.addEventListener('click', () => {
-                arcadeGameDiv.style.display = 'none';
-            });
-
-            quizButton.addEventListener('click', () => {
-                if (money >= 3000) {
-                    money -= 3000;
-                    quizBought = true;
-                    updateMoneyDisplay();
-                    quizButton.style.display = 'none';
-                    quizGameDiv.style.display = 'block';
-                    randomQuizQuestion();
-                } else {
-                    alert('Not enough money to buy the Quiz!');
-                }
-            });
-
-            answerButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    randomQuizQuestion();
-                });
-            });
-
-            closeQuizButton.addEventListener('click', () => {
-                quizGameDiv.style.display = 'none';
-            });
-
-            // Initialize auto collect and tax intervals if there is any saved state
+    loadButton.addEventListener('click', () => {
+        const savedGameState = localStorage.getItem('gameState');
+        if (savedGameState !== null) {
+            const gameState = JSON.parse(savedGameState);
+            money = gameState.money;
+            moneyPerClick = gameState.moneyPerClick;
+            autoCollect = gameState.autoCollect;
+            multiplier = gameState.multiplier;
+            floorsIncome = gameState.floorsIncome;
+            floors = gameState.floors;
+            arcadeBought = gameState.arcadeBought;
+            quizBought = gameState.quizBought;
+            updateMoneyDisplay();
             startAutoCollect();
             startTaxIntervals();
+            if (arcadeBought) {
+                arcadeButton.style.display = 'none';
+                arcadeGameDiv.style.display = 'block';
+            }
+            if (quizBought) {
+                quizButton.style.display = 'none';
+                quizGameDiv.style.display = 'block';
+            }
+        }
+    });
+
+    collectUpgrade1Button.addEventListener('click', () => {
+        if (money >= 10) {
+            money -= 10;
+            moneyPerClick += 1;
+            updateMoneyDisplay();
+        } else {
+            alert('Not enough money to buy Collect Upgrade 1!');
+        }
+    });
+
+    collectUpgrade2Button.addEventListener('click', () => {
+        if (money >= 50) {
+            money -= 50;
+            moneyPerClick += 5;
+            updateMoneyDisplay();
+        } else {
+            alert('Not enough money to buy Collect Upgrade 2!');
+        }
+    });
+
+    autoCollectUpgrade1Button.addEventListener('click', () => {
+        if (money >= 100) {
+            money -= 100;
+            autoCollect += 1;
+            updateMoneyDisplay();
+            startAutoCollect();
+        } else {
+            alert('Not enough money to buy Auto Collect Upgrade 1!');
+        }
+    });
+
+    autoCollectUpgrade2Button.addEventListener('click', () => {
+        if (money >= 500) {
+            money -= 500;
+            autoCollect += 5;
+            updateMoneyDisplay();
+            startAutoCollect();
+        } else {
+            alert('Not enough money to buy Auto Collect Upgrade 2!');
+        }
+    });
+
+    multiplierUpgrade1Button.addEventListener('click', () => {
+        if (money >= 200) {
+            money -= 200;
+            multiplier *= 2;
+            updateMoneyDisplay();
+        } else {
+            alert('Not enough money to buy Multiplier Upgrade 1!');
+        }
+    });
+
+    multiplierUpgrade2Button.addEventListener('click', () => {
+        if (money >= 1000) {
+            money -= 1000;
+            multiplier *= 5;
+            updateMoneyDisplay();
+        } else {
+            alert('Not enough money to buy Multiplier Upgrade 2!');
+        }
+    });
+
+    floor1Button.addEventListener('click', () => {
+        if (money >= 1000) {
+            money -= 1000;
+            floorsIncome += 10;
+            floors += 1;
+            updateMoneyDisplay();
+            startAutoCollect();
+        } else {
+            alert('Not enough money to buy Floor 1!');
+        }
+    });
+
+    floor2Button.addEventListener('click', () => {
+        if (money >= 5000) {
+            money -= 5000;
+            floorsIncome += 50;
+            floors += 1;
+            updateMoneyDisplay();
+            startAutoCollect();
+        } else {
+            alert('Not enough money to buy Floor 2!');
+        }
+    });
+
+    arcadeButton.addEventListener('click', () => {
+        if (money >= 2000) {
+            money -= 2000;
+            arcadeBought = true;
+            updateMoneyDisplay();
+            arcadeButton.style.display = 'none';
+            arcadeGameDiv.style.display = 'block';
+        } else {
+            alert('Not enough money to buy the Arcade!');
+        }
+    });
+
+    startGameButton.addEventListener('click', () => {
+        arcadeScore = 0;
+        arcadeScoreDisplay.textContent = `Score: ${arcadeScore}`;
+        arcadeClickButton.style.display = 'inline-block';
+        startGameButton.style.display = 'none';
+        const startTime = Date.now();
+        const gameDuration = 10000; // 10 seconds
+
+        const gameInterval = setInterval(() => {
+            const currentTime = Date.now();
+            if (currentTime - startTime >= gameDuration) {
+                clearInterval(gameInterval);
+                arcadeClickButton.style.display = 'none';
+                startGameButton.style.display = 'inline-block';
+                const reward = arcadeScore * 10;
+                money += reward;
+                updateMoneyDisplay();
+                alert(`Game over! You scored ${arcadeScore} and earned ${reward} money!`);
+            }
+        }, 100);
+
+        arcadeClickButton.onclick = () => {
+            arcadeScore++;
+            arcadeScoreDisplay.textContent = `Score: ${arcadeScore}`;
+        };
+    });
+
+    closeArcadeButton.addEventListener('click', () => {
+        arcadeGameDiv.style.display = 'none';
+    });
+
+    quizButton.addEventListener('click', () => {
+        if (money >= 3000) {
+            money -= 3000;
+            quizBought = true;
+            updateMoneyDisplay();
+            quizButton.style.display = 'none';
+            quizGameDiv.style.display = 'block';
+            randomQuizQuestion();
+        } else {
+            alert('Not enough money to buy the Quiz!');
+        }
+    });
+
+    answerButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            randomQuizQuestion();
         });
-    </script>
-</body>
-</html>
+    });
+
+    closeQuizButton.addEventListener('click', () => {
+        quizGameDiv.style.display = 'none';
+    });
+
+    // Initialize auto collect and tax intervals if there is any saved state
+    startAutoCollect();
+    startTaxIntervals();
+});
