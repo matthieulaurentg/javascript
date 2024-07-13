@@ -58,6 +58,24 @@
     #player2Score {
         color: #0f0;
     }
+    .button-container {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        justify-content: space-between;
+        width: 100px;
+    }
+    .button {
+        width: 40px;
+        height: 40px;
+        background-color: #444;
+        border: none;
+        color: #fff;
+        font-size: 20px;
+        cursor: pointer;
+    }
 </style>
 </head>
 <body>
@@ -67,6 +85,12 @@
         <div id="ball"></div>
         <div class="score" id="player1Score">Player 1: 0</div>
         <div class="score" id="player2Score">Player 2: 0</div>
+        <div class="button-container">
+            <button class="button" id="player1Up">↑</button>
+            <button class="button" id="player1Down">↓</button>
+            <button class="button" id="player2Up">↑</button>
+            <button class="button" id="player2Down">↓</button>
+        </div>
     </div>
 
     <script>
@@ -77,6 +101,10 @@
             const rightPaddle = document.getElementById('rightPaddle');
             const player1ScoreElem = document.getElementById('player1Score');
             const player2ScoreElem = document.getElementById('player2Score');
+            const player1UpBtn = document.getElementById('player1Up');
+            const player1DownBtn = document.getElementById('player1Down');
+            const player2UpBtn = document.getElementById('player2Up');
+            const player2DownBtn = document.getElementById('player2Down');
 
             let ballX = 400;
             let ballY = 200;
@@ -135,22 +163,30 @@
                 ballSpeedX = -ballSpeedX; // Reverse direction
             }
 
-            function touchMoveHandler(event) {
-                const touchY = event.touches[0].clientY - gameScreen.offsetTop;
-                
-                // Move left paddle (Player 1)
-                if (event.target.id === 'gameScreen' || event.target.id === 'leftPaddle') {
-                    leftPaddleY = Math.min(gameScreen.clientHeight - leftPaddle.clientHeight, Math.max(0, touchY - leftPaddle.clientHeight / 2));
-                }
-                // Move right paddle (Player 2)
-                if (event.target.id === 'gameScreen' || event.target.id === 'rightPaddle') {
-                    rightPaddleY = Math.min(gameScreen.clientHeight - rightPaddle.clientHeight, Math.max(0, touchY - rightPaddle.clientHeight / 2));
-                }
+            function movePlayer1Up() {
+                leftPaddleY = Math.max(0, leftPaddleY - paddleSpeed);
             }
 
+            function movePlayer1Down() {
+                leftPaddleY = Math.min(gameScreen.clientHeight - leftPaddle.clientHeight, leftPaddleY + paddleSpeed);
+            }
+
+            function movePlayer2Up() {
+                rightPaddleY = Math.max(0, rightPaddleY - paddleSpeed);
+            }
+
+            function movePlayer2Down() {
+                rightPaddleY = Math.min(gameScreen.clientHeight - rightPaddle.clientHeight, rightPaddleY + paddleSpeed);
+            }
+
+            player1UpBtn.addEventListener('click', movePlayer1Up);
+            player1DownBtn.addEventListener('click', movePlayer1Down);
+            player2UpBtn.addEventListener('click', movePlayer2Up);
+            player2DownBtn.addEventListener('click', movePlayer2Down);
+
             setInterval(update, 1000 / 60); // Update at 60 frames per second
-            gameScreen.addEventListener('touchmove', touchMoveHandler);
         });
     </script>
 </body>
 </html>
+f
