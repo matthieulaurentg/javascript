@@ -15,12 +15,17 @@
         color: #fff;
         font-family: Arial, sans-serif;
     }
-    #gameScreen {
+    #gameContainer {
         position: relative;
         width: 100%;
         max-width: 800px; /* Limit maximum width for larger screens */
         height: 80vh; /* Adjust height for better mobile experience */
         max-height: 400px; /* Limit maximum height for larger screens */
+    }
+    #gameScreen {
+        position: relative;
+        width: 100%;
+        height: 100%;
         background-color: #000;
         border: 2px solid #fff;
         overflow: hidden; /* Hide overflow to prevent scrolling on mobile */
@@ -58,44 +63,47 @@
     #player2Score {
         color: #0f0;
     }
-    .button-container {
+    .control-buttons {
         position: absolute;
-        top: 0;
-        bottom: 0;
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: space-around;
+        justify-content: space-between;
+        top: 0;
+        bottom: 0;
+        width: 60px; /* Width of the control buttons container */
     }
     .button {
-        width: 60px;
-        height: 60px;
+        width: 50px; /* Adjust button width */
+        height: 50px; /* Adjust button height */
         background-color: #444;
         border: none;
         color: #fff;
-        font-size: 28px;
+        font-size: 24px;
         cursor: pointer;
     }
     #player1Buttons {
-        left: 0;
+        left: 10px; /* Distance from left edge */
     }
     #player2Buttons {
-        right: 0;
+        right: 10px; /* Distance from right edge */
     }
 </style>
 </head>
 <body>
-    <div id="gameScreen">
-        <div class="paddle" id="leftPaddle"></div>
-        <div class="paddle" id="rightPaddle"></div>
-        <div id="ball"></div>
-        <div class="score" id="player1Score">Player 1: 0</div>
-        <div class="score" id="player2Score">Player 2: 0</div>
-        <div class="button-container" id="player1Buttons">
+    <div id="gameContainer">
+        <div id="gameScreen">
+            <div class="paddle" id="leftPaddle"></div>
+            <div class="paddle" id="rightPaddle"></div>
+            <div id="ball"></div>
+            <div class="score" id="player1Score">Player 1: 0</div>
+            <div class="score" id="player2Score">Player 2: 0</div>
+        </div>
+        <div class="control-buttons" id="player1Buttons">
             <button class="button" id="player1Up">↑</button>
             <button class="button" id="player1Down">↓</button>
         </div>
-        <div class="button-container" id="player2Buttons">
+        <div class="control-buttons" id="player2Buttons">
             <button class="button" id="player2Up">↑</button>
             <button class="button" id="player2Down">↓</button>
         </div>
