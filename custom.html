@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clicker Character Customization Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        .character-container {
+            position: relative;
+            display: inline-block;
+        }
+        #character, #body, #legs {
+            background-color: red;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.3s, width 0.3s, height 0.3s, border-radius 0.3s, border-color 0.3s, border-width 0.3s;
+        }
+        #character {
+            width: 100px;
+            height: 100px;
+            font-size: 50px;
+            margin-bottom: -10px;
+            cursor: pointer;
+        }
+        #body {
+            width: 100px;
+            height: 150px;
+            margin-bottom: -10px;
+        }
+        #legs {
+            width: 100px;
+            height: 150px;
+        }
+        #hat {
+            position: absolute;
+            top: -30px;
+            width: 100%;
+            text-align: center;
+            font-size: 30px;
+        }
+        .controls {
+            margin: 10px 0;
+        }
+        #score {
+            font-size: 24px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Clicker Character Customization Game</h1>
+    <div class="character-container">
+        <div id="hat"></div>
+        <div id="character">😊</div>
+        <div id="body"></div>
+        <div id="legs"></div>
+    </div>
+    <div id="score">Score: 0</div>
+    <div class="controls">
+        <label for="color">Select Head Color:</label>
+        <input type="color" id="color" name="color">
+    </div>
+    <div class="controls">
+        <label for="bodyColor">Select Body Color:</label>
+        <input type="color" id="bodyColor" name="bodyColor">
+    </div>
+    <div class="controls">
+        <label for="legsColor">Select Legs Color:</label>
+        <input type="color" id="legsColor" name="legsColor">
+    </div>
+    <div class="controls">
+        <label for="size">Select Head Size:</label>
+        <input type="range" id="size" name="size" min="50" max="200">
+    </div>
+    <div class="controls">
+        <label for="bodySize">Select Body Size:</label>
+        <input type="range" id="bodySize" name="bodySize" min="50" max="200">
+    </div>
+    <div class="controls">
+        <label for="legsSize">Select Legs Size:</label>
+        <input type="range" id="legsSize" name="legsSize" min="50" max="200">
+    </div>
+    <div class="controls">
+        <label for="borderColor">Select Head Border Color:</label>
+        <input type="color" id="borderColor" name="borderColor">
+    </div>
+    <div class="controls">
+        <label for="borderRadius">Select Head Border Radius:</label>
+        <input type="range" id="borderRadius" name="borderRadius" min="0" max="50">
+    </div>
+    <div class="controls">
+        <label for="borderWidth">Select Head Border Width:</label>
+        <input type="range" id="borderWidth" name="borderWidth" min="0" max="20">
+    </div>
+    <div class="controls">
+        <label for="face">Select Face:</label>
+        <select id="face" name="face">
+            <option value="😊">Smiling</option>
+            <option value="😈">Evil</option>
+            <option value="😠">Angry</option>
+            <option value="😢">Sad</option>
+        </select>
+    </div>
+    <div class="controls">
+        <label for="hat">Select Hat:</label>
+        <select id="hatSelect" name="hat">
+            <option value="">None</option>
+            <option value="🎩">Top Hat</option>
+            <option value="👒">Woman’s Hat</option>
+            <option value="🎓">Graduation Cap</option>
+            <option value="⛑️">Rescue Worker’s Helmet</option>
+        </select>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const character = document.getElementById('character');
+            const body = document.getElementById('body');
+            const legs = document.getElementById('legs');
+            const colorInput = document.getElementById('color');
+            const bodyColorInput = document.getElementById('bodyColor');
+            const legsColorInput = document.getElementById('legsColor');
+            const sizeInput = document.getElementById('size');
+            const bodySizeInput = document.getElementById('bodySize');
+            const legsSizeInput = document.getElementById('legsSize');
+            const borderColorInput = document.getElementById('borderColor');
+            const borderRadiusInput = document.getElementById('borderRadius');
+            const borderWidthInput = document.getElementById('borderWidth');
+            const faceSelect = document.getElementById('face');
+            const hatSelect = document.getElementById('hatSelect');
+            const hat = document.getElementById('hat');
+            let score = 0;
+            const scoreDisplay = document.getElementById('score');
+
+            colorInput.addEventListener('input', (e) => {
+                character.style.backgroundColor = e.target.value;
+            });
+
+            bodyColorInput.addEventListener('input', (e) => {
+                body.style.backgroundColor = e.target.value;
+            });
+
+            legsColorInput.addEventListener('input', (e) => {
+                legs.style.backgroundColor = e.target.value;
+            });
+
+            sizeInput.addEventListener('input', (e) => {
+                const size = e.target.value + 'px';
+                character.style.width = size;
+                character.style.height = size;
+                hat.style.fontSize = (parseInt(e.target.value) / 2) + 'px';
+            });
+
+            bodySizeInput.addEventListener('input', (e) => {
+                const size = e.target.value + 'px';
+                body.style.width = size;
+                body.style.height = size;
+            });
+
+            legsSizeInput.addEventListener('input', (e) => {
+                const size = e.target.value + 'px';
+                legs.style.width = size;
+                legs.style.height = size;
+            });
+
+            borderColorInput.addEventListener('input', (e) => {
+                character.style.borderColor = e.target.value;
+                character.style.borderStyle = 'solid';
+            });
+
+            borderRadiusInput.addEventListener('input', (e) => {
+                const radius = e.target.value + '%';
+                character.style.borderRadius = radius;
+            });
+
+            borderWidthInput.addEventListener('input', (e) => {
+                const width = e.target.value + 'px';
+                character.style.borderWidth = width;
+            });
+
+            faceSelect.addEventListener('change', (e) => {
+                character.textContent = e.target.value;
+            });
+
+            hatSelect.addEventListener('change', (e) => {
+                hat.textContent = e.target.value;
+            });
+
+            character.addEventListener('click', () => {
+                score++;
+                scoreDisplay.textContent = `Score: ${score}`;
+            });
+        });
+    </script>
+</body>
+</html>
