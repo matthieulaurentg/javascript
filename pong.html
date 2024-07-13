@@ -60,21 +60,27 @@
     }
     .button-container {
         position: absolute;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
+        top: 0;
+        bottom: 0;
         display: flex;
-        justify-content: space-between;
-        width: 100px;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-around;
     }
     .button {
-        width: 40px;
-        height: 40px;
+        width: 60px;
+        height: 60px;
         background-color: #444;
         border: none;
         color: #fff;
-        font-size: 20px;
+        font-size: 28px;
         cursor: pointer;
+    }
+    #player1Buttons {
+        left: 0;
+    }
+    #player2Buttons {
+        right: 0;
     }
 </style>
 </head>
@@ -85,9 +91,11 @@
         <div id="ball"></div>
         <div class="score" id="player1Score">Player 1: 0</div>
         <div class="score" id="player2Score">Player 2: 0</div>
-        <div class="button-container">
+        <div class="button-container" id="player1Buttons">
             <button class="button" id="player1Up">↑</button>
             <button class="button" id="player1Down">↓</button>
+        </div>
+        <div class="button-container" id="player2Buttons">
             <button class="button" id="player2Up">↑</button>
             <button class="button" id="player2Down">↓</button>
         </div>
@@ -189,4 +197,3 @@
     </script>
 </body>
 </html>
-f
