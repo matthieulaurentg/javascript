@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pong Game - Two Player</title>
+<style>
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #333;
+        color: #fff;
+        font-family: Arial, sans-serif;
+    }
+    #gameScreen {
+        position: relative;
+        width: 800px;
+        height: 400px;
+        background-color: #000;
+        border: 2px solid #fff;
+    }
+    .paddle {
+        position: absolute;
+        width: 10px;
+        height: 80px;
+        background-color: #fff;
+    }
+    #leftPaddle {
+        left: 10px;
+    }
+    #rightPaddle {
+        right: 10px;
+    }
+    #ball {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background-color: #fff;
+        border-radius: 50%;
+    }
+    .score {
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 24px;
+    }
+    #player1Score {
+        color: #f00;
+    }
+    #player2Score {
+        color: #0f0;
+    }
+</style>
+</head>
+<body>
+    <div id="gameScreen">
+        <div class="paddle" id="leftPaddle"></div>
+        <div class="paddle" id="rightPaddle"></div>
+        <div id="ball"></div>
+        <div class="score" id="player1Score">Player 1: 0</div>
+        <div class="score" id="player2Score" style="right: 0;">Player 2: 0</div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const gameScreen = document.getElementById('gameScreen');
+            const ball = document.getElementById('ball');
+            const leftPaddle = document.getElementById('leftPaddle');
+            const rightPaddle = document.getElementById('rightPaddle');
+            const player1ScoreElem = document.getElementById('player1Score');
+            const player2ScoreElem = document.getElementById('player2Score');
+
+            let ballX = 400;
+            let ballY = 200;
+            let ballSpeedX = 3;
+            let ballSpeedY = 3;
+
+            let leftPaddleY = 160;
+            let rightPaddleY = 160;
+            const paddleSpeed = 10;
+
+            let player1Score = 0;
+            let player2Score = 0;
+
+            function update() {
+                // Move ball
+                ballX += ballSpeedX;
+                ballY += ballSpeedY;
+                ball.style.left = ballX + 'px';
+                ball.style.top = ballY + 'px';
+
+                // Check collision with top and bottom walls
+                if (ballY <= 0 || ballY >= 380) {
+                    ballSpeedY = -ballSpeedY;
+                }
+
+                // Check collision with paddles
+                if (ballX <= 20 && ballY >= leftPaddleY && ballY <= leftPaddleY + 80) {
+                    ballSpeedX = -ballSpeedX;
+                }
+                if (ballX >= 760 && ballY >= rightPaddleY && ballY <= rightPaddleY + 80) {
+                    ballSpeedX = -ballSpeedX;
+                }
+
+                // Check if ball goes out of bounds
+                if (ballX <= 0) {
+                    // Player 2 scores
+                    player2Score++;
+                    player2ScoreElem.textContent = `Player 2: ${player2Score}`;
+                    resetBall();
+                }
+                if (ballX >= 780) {
+                    // Player 1 scores
+                    player1Score++;
+                    player1ScoreElem.textContent = `Player 1: ${player1Score}`;
+                    resetBall();
+                }
+
+                // Update paddle positions
+                leftPaddle.style.top = leftPaddleY + 'px';
+                rightPaddle.style.top = rightPaddleY + 'px';
+            }
+
+            function resetBall() {
+                ballX = 400;
+                ballY = 200;
+                ballSpeedX = -ballSpeedX; // Reverse direction
+            }
+
+            function keyDownHandler(event) {
+                // Player 1 controls
+                if (event.key === 'w' && leftPaddleY > 0) {
+                    leftPaddleY -= paddleSpeed;
+                } else if (event.key === 's' && leftPaddleY < 320) {
+                    leftPaddleY += paddleSpeed;
+                }
+
+                // Player 2 controls
+                if (event.key === 'ArrowUp' && rightPaddleY > 0) {
+                    rightPaddleY -= paddleSpeed;
+                } else if (event.key === 'ArrowDown' && rightPaddleY < 320) {
+                    rightPaddleY += paddleSpeed;
+                }
+            }
+
+            setInterval(update, 1000 / 60); // Update at 60 frames per second
+            document.addEventListener('keydown', keyDownHandler);
+        });
+    </script>
+</body>
+</html>
