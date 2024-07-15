@@ -4,7 +4,7 @@ import time
 
 def open_fullscreen_blackscreen():
     # Open the URL
-    webbrowser.open('https://www.whitescreen.online/black-screen/')
+    webbrowser.open('https://t3.ftcdn.net/jpg/04/63/51/28/360_F_463512856_GEk2IrQkYatpRVR9YDhiZgRY2z00Zet3.jpg/')
     
     # Wait for the page to load (adjust the time if needed)
     time.sleep(2)
