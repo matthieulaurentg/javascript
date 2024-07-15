@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fullscreen Black Screen Hotkey</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        #message {
+            text-align: center;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div id="message">
+        <h1>Fullscreen Black Screen Hotkey</h1>
+        <p>Press Ctrl+Alt+P to open the black screen in fullscreen mode.</p>
+    </div>
+
+    <script>
+        document.addEventListener('keydown', function(event) {
+            if (event.ctrlKey && event.altKey && event.key === 'p') {
+                event.preventDefault();
+                openFullscreenBlackscreen();
+            }
+        });
+
+        function openFullscreenBlackscreen() {
+            const win = window.open('https://www.whitescreen.online/black-screen/', '_blank');
+            win.focus();
+            
+            // Attempt to enter fullscreen mode after a short delay
+            setTimeout(() => {
+                if (win.document.documentElement.requestFullscreen) {
+                    win.document.documentElement.requestFullscreen();
+                } else if (win.document.documentElement.mozRequestFullScreen) { // Firefox
+                    win.document.documentElement.mozRequestFullScreen();
+                } else if (win.document.documentElement.webkitRequestFullscreen) { // Chrome, Safari and Opera
+                    win.document.documentElement.webkitRequestFullscreen();
+                } else if (win.document.documentElement.msRequestFullscreen) { // IE/Edge
+                    win.document.documentElement.msRequestFullscreen();
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
