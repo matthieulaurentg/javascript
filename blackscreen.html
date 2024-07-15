@@ -3,57 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fullscreen Black Screen Hotkey</title>
+    <title>Black Screen Fullscreen Toggle</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+        body, html {
             margin: 0;
-            background-color: #f0f0f0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
         }
-        #message {
-            text-align: center;
+        #blackScreen {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+        #instructions {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 255, 255, 0.8);
             padding: 20px;
-            background-color: white;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+            font-family: Arial, sans-serif;
         }
     </style>
 </head>
 <body>
-    <div id="message">
-        <h1>Fullscreen Black Screen Hotkey</h1>
-        <p>Press Ctrl+Alt+P to open the black screen in fullscreen mode.</p>
+    <img id="blackScreen" src="https://t3.ftcdn.net/jpg/04/63/51/28/360_F_463512856_GEk2IrQkYatpRVR9YDhiZgRY2z00Zet3.jpg" alt="Black Screen">
+    <div id="instructions">
+        <h1>Black Screen Fullscreen Toggle</h1>
+        <p>Press Ctrl+Alt+P to toggle fullscreen black screen.</p>
+        <p>Press Esc to exit fullscreen.</p>
     </div>
 
     <script>
+        const blackScreen = document.getElementById('blackScreen');
+        const instructions = document.getElementById('instructions');
+        let isFullscreen = false;
+
+        function toggleFullscreenBlackScreen() {
+            if (!isFullscreen) {
+                if (document.documentElement.requestFullscreen) {
+                    document.documentElement.requestFullscreen();
+                } else if (document.documentElement.mozRequestFullScreen) {
+                    document.documentElement.mozRequestFullScreen();
+                } else if (document.documentElement.webkitRequestFullscreen) {
+                    document.documentElement.webkitRequestFullscreen();
+                } else if (document.documentElement.msRequestFullscreen) {
+                    document.documentElement.msRequestFullscreen();
+                }
+                blackScreen.style.display = 'block';
+                instructions.style.display = 'none';
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+                blackScreen.style.display = 'none';
+                instructions.style.display = 'block';
+            }
+            isFullscreen = !isFullscreen;
+        }
+
         document.addEventListener('keydown', function(event) {
             if (event.ctrlKey && event.altKey && event.key === 'p') {
                 event.preventDefault();
-                openFullscreenBlackscreen();
+                toggleFullscreenBlackScreen();
             }
         });
 
-        function openFullscreenBlackscreen() {
-            const win = window.open('https://t3.ftcdn.net/jpg/04/63/51/28/360_F_463512856_GEk2IrQkYatpRVR9YDhiZgRY2z00Zet3.jpg', '_blank');
-            win.focus();
-            
-            // Attempt to enter fullscreen mode after a short delay
-            setTimeout(() => {
-                if (win.document.documentElement.requestFullscreen) {
-                    win.document.documentElement.requestFullscreen();
-                } else if (win.document.documentElement.mozRequestFullScreen) { // Firefox
-                    win.document.documentElement.mozRequestFullScreen();
-                } else if (win.document.documentElement.webkitRequestFullscreen) { // Chrome, Safari and Opera
-                    win.document.documentElement.webkitRequestFullscreen();
-                } else if (win.document.documentElement.msRequestFullscreen) { // IE/Edge
-                    win.document.documentElement.msRequestFullscreen();
-                }
-            }, 1000);
-        }
+        document.addEventListener('fullscreenchange', function() {
+            if (!document.fullscreenElement) {
+                blackScreen.style.display = 'none';
+                instructions.style.display = 'block';
+                isFullscreen = false;
+            }
+        });
     </script>
 </body>
 </html>
