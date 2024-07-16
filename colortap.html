@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fast-Paced Color Tap</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        #game-container {
+            width: 300px;
+            height: 500px;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        #game-header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+        #color-name {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        #game-stats {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+        #game-area {
+            flex-grow: 1;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            align-content: space-around;
+            padding: 20px;
+        }
+        .color-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        .color-circle:active {
+            transform: scale(0.95);
+        }
+        #timer-bar {
+            height: 10px;
+            background-color: #4CAF50;
+            width: 100%;
+            transition: width 0.1s linear;
+        }
+        #game-over {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 24px;
+            display: none;
+        }
+        #restart-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <div id="game-header">
+            <div id="color-name">RED</div>
+        </div>
+        <div id="game-stats">
+            <div>Score: <span id="score">0</span></div>
+            <div>High Score: <span id="high-score">0</span></div>
+        </div>
+        <div id="timer-bar"></div>
+        <div id="game-area"></div>
+        <div id="game-over">
+            <div>Game Over!</div>
+            <div>Your score: <span id="final-score"></span></div>
+            <button id="restart-button">Play Again</button>
+        </div>
+    </div>
+
+    <script>
+        const colors = ['red', 'blue', 'green', 'yellow'];
+        let currentColor;
+        let score = 0;
+        let highScore = 0;
+        let timerInterval;
+        let isGameRunning = false;
+
+        const colorNameElement = document.getElementById('color-name');
+        const scoreElement = document.getElementById('score');
+        const highScoreElement = document.getElementById('high-score');
+        const gameArea = document.getElementById('game-area');
+        const timerBar = document.getElementById('timer-bar');
+        const gameOverScreen = document.getElementById('game-over');
+        const finalScoreElement = document.getElementById('final-score');
+        const restartButton = document.getElementById('restart-button');
+
+        restartButton.addEventListener('click', startGame);
+
+        function startGame() {
+            if (isGameRunning) return;
+            isGameRunning = true;
+            score = 0;
+            updateScore();
+            gameArea.innerHTML = '';
+            createCircles();
+            setNewColor();
+            startTimer();
+            gameOverScreen.style.display = 'none';
+        }
+
+        function createCircles() {
+            colors.forEach(color => {
+                const circle = document.createElement('div');
+                circle.className = 'color-circle';
+                circle.style.backgroundColor = color;
+                circle.addEventListener('click', () => handleCircleClick(color));
+                gameArea.appendChild(circle);
+            });
+        }
+
+        function handleCircleClick(color) {
+            if (!isGameRunning) return;
+            if (color === currentColor) {
+                score++;
+                updateScore();
+                setNewColor();
+                resetTimer();
+            } else {
+                endGame();
+            }
+        }
+
+        function setNewColor() {
+            currentColor = colors[Math.floor(Math.random() * colors.length)];
+            colorNameElement.textContent = currentColor.toUpperCase();
+        }
+
+        function updateScore() {
+            scoreElement.textContent = score;
+            if (score > highScore) {
+                highScore = score;
+                highScoreElement.textContent = highScore;
+            }
+        }
+
+        function startTimer() {
+            let timeLeft = 100;
+            timerInterval = setInterval(() => {
+                timeLeft -= 2;
+                timerBar.style.width = `${timeLeft}%`;
+                if (timeLeft <= 0) {
+                    endGame();
+                }
+            }, 50);
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            timerBar.style.width = '100%';
+            startTimer();
+        }
+
+        function endGame() {
+            isGameRunning = false;
+            clearInterval(timerInterval);
+            finalScoreElement.textContent = score;
+            gameOverScreen.style.display = 'flex';
+        }
+
+        startGame();
+    </script>
+</body>
+</html>
