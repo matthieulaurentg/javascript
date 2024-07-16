@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stylish Minesweeper</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --background-color: #ecf0f1;
+            --cell-color: #bdc3c7;
+            --cell-revealed: #e0e0e0;
+            --text-color: #34495e;
+            --mine-color: #e74c3c;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+        .game-container {
+            text-align: center;
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        #game-board {
+            display: inline-grid;
+            gap: 2px;
+            background-color: var(--cell-color);
+            border: 3px solid var(--primary-color);
+            padding: 5px;
+            margin: 0 auto;
+            border-radius: 5px;
+        }
+        .cell {
+            width: 30px;
+            height: 30px;
+            background-color: var(--cell-color);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 3px;
+        }
+        .cell:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        .cell.revealed {
+            background-color: var(--cell-revealed);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        .cell.mine {
+            background-color: var(--mine-color);
+            color: white;
+        }
+        #message {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            min-height: 20px;
+            color: var(--secondary-color);
+        }
+        button {
+            margin-top: 20px;
+            padding: 12px 24px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        button:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        @media (max-width: 500px) {
+            .game-container {
+                padding: 10px;
+            }
+            h1 {
+                font-size: 24px;
+            }
+            .cell {
+                width: 28px;
+                height: 28px;
+                font-size: 12px;
+            }
+        }
+        @media (max-width: 350px) {
+            .cell {
+                width: 24px;
+                height: 24px;
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Minesweeper</h1>
+        <div id="game-board"></div>
+        <div id="message"></div>
+        <button id="new-game-btn">New Game</button>
+    </div>
+
+    <script>
+        const boardSize = 10;
+        const numMines = 10;
+        let board = [];
+        let revealed = [];
+        let gameOver = false;
+
+        function createBoard() {
+            const gameBoard = document.getElementById('game-board');
+            gameBoard.style.gridTemplateColumns = `repeat(${boardSize}, auto)`;
+            gameBoard.innerHTML = '';
+
+            board = Array(boardSize).fill().map(() => Array(boardSize).fill(0));
+            revealed = Array(boardSize).fill().map(() => Array(boardSize).fill(false));
+
+            // Place mines
+            let minesPlaced = 0;
+            while (minesPlaced < numMines) {
+                const row = Math.floor(Math.random() * boardSize);
+                const col = Math.floor(Math.random() * boardSize);
+                if (board[row][col] !== -1) {
+                    board[row][col] = -1;
+                    minesPlaced++;
+                }
+            }
+
+            // Calculate numbers
+            for (let row = 0; row < boardSize; row++) {
+                for (let col = 0; col < boardSize; col++) {
+                    if (board[row][col] !== -1) {
+                        board[row][col] = countAdjacentMines(row, col);
+                    }
+                    const cell = document.createElement('div');
+                    cell.classList.add('cell');
+                    cell.dataset.row = row;
+                    cell.dataset.col = col;
+                    cell.addEventListener('click', () => revealCell(row, col));
+                    gameBoard.appendChild(cell);
+                }
+            }
+        }
+
+        function countAdjacentMines(row, col) {
+            let count = 0;
+            for (let i = -1; i <= 1; i++) {
+                for (let j = -1; j <= 1; j++) {
+                    const newRow = row + i;
+                    const newCol = col + j;
+                    if (newRow >= 0 && newRow < boardSize && newCol >= 0 && newCol < boardSize) {
+                        if (board[newRow][newCol] === -1) count++;
+                    }
+                }
+            }
+            return count;
+        }
+
+        function revealCell(row, col) {
+            if (gameOver || revealed[row][col]) return;
+
+            revealed[row][col] = true;
+            const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+            cell.classList.add('revealed');
+
+            if (board[row][col] === -1) {
+                cell.classList.add('mine');
+                cell.textContent = '💣';
+                gameOver = true;
+                document.getElementById('message').textContent = 'Game Over! You hit a mine.';
+            } else if (board[row][col] > 0) {
+                cell.textContent = board[row][col];
+                cell.style.color = getNumberColor(board[row][col]);
+            } else {
+                // Reveal adjacent cells for empty cells
+                for (let i = -1; i <= 1; i++) {
+                    for (let j = -1; j <= 1; j++) {
+                        const newRow = row + i;
+                        const newCol = col + j;
+                        if (newRow >= 0 && newRow < boardSize && newCol >= 0 && newCol < boardSize) {
+                            revealCell(newRow, newCol);
+                        }
+                    }
+                }
+            }
+
+            checkWin();
+        }
+
+        function getNumberColor(num) {
+            const colors = ['#3498db', '#2ecc71', '#e74c3c', '#9b59b6', '#f1c40f', '#1abc9c', '#34495e', '#7f8c8d'];
+            return colors[num - 1] || '#000000';
+        }
+
+        function checkWin() {
+            const totalCells = boardSize * boardSize;
+            const revealedCells = revealed.flat().filter(cell => cell).length;
+            if (revealedCells === totalCells - numMines) {
+                gameOver = true;
+                document.getElementById('message').textContent = 'Congratulations! You won!';
+            }
+        }
+
+        document.getElementById('new-game-btn').addEventListener('click', () => {
+            gameOver = false;
+            document.getElementById('message').textContent = '';
+            createBoard();
+        });
+
+        // Initialize the game
+        createBoard();
+    </script>
+</body>
+</html>
