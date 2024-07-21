@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Lemonade Tycoon</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #87CEEB;
+        }
+        .game-container {
+            background-color: #FFFACD;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+            text-align: center;
+            max-width: 800px;
+            width: 100%;
+        }
+        h1, h2 {
+            color: #FF6347;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        .resources, .upgrades, .status {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .resource, .upgrade, .status-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 5px;
+        }
+        .icon {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 5px;
+        }
+        button {
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 14px;
+            cursor: pointer;
+            background-color: #FFD700;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #FFA500;
+        }
+        #lemonTree {
+            max-width: 200px;
+            margin: 20px auto;
+            cursor: pointer;
+        }
+        .upgrade-info {
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        #harvestProgress, #dayProgress {
+            width: 100%;
+            background-color: #ddd;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        #harvestBar, #dayBar {
+            width: 0%;
+            height: 20px;
+            background-color: #4CAF50;
+            border-radius: 5px;
+            transition: width 0.5s;
+        }
+        #weatherIcon {
+            font-size: 40px;
+        }
+        #notification {
+            background-color: #FFD700;
+            color: #000;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Enhanced Lemonade Tycoon</h1>
+        <div class="status">
+            <div class="status-item">
+                <div>Day: <span id="day">1</span></div>
+            </div>
+            <div class="status-item">
+                <div>Weather: <span id="weatherIcon"></span></div>
+            </div>
+            <div class="status-item">
+                <div>Customer Satisfaction: <span id="satisfaction">100</span>%</div>
+            </div>
+        </div>
+        <div id="dayProgress">
+            <div id="dayBar"></div>
+        </div>
+        <div class="resources">
+            <div class="resource">
+                <svg class="icon" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10" fill="#FFD700"/>
+                    <text x="12" y="16" font-size="12" text-anchor="middle" fill="#000">$</text>
+                </svg>
+                <span id="money">10</span>
+            </div>
+            <div class="resource">
+                <svg class="icon" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10" fill="#FFFF00"/>
+                    <ellipse cx="12" cy="14" rx="6" ry="4" fill="#90EE90"/>
+                </svg>
+                <span id="lemons">0</span>
+            </div>
+            <div class="resource">
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path d="M5,5 L19,5 L17,19 L7,19 Z" fill="#FFA500"/>
+                    <rect x="9" y="2" width="6" height="3" fill="#8B4513"/>
+                </svg>
+                <span id="lemonade">0</span>
+            </div>
+            <div class="resource">
+                <svg class="icon" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10" fill="#FFFFFF"/>
+                    <text x="12" y="16" font-size="12" text-anchor="middle" fill="#000">Ice</text>
+                </svg>
+                <span id="ice">0</span>
+            </div>
+        </div>
+        <button onclick="makeLemonade()">Make Lemonade</button>
+        <button onclick="sellLemonade()">Sell Lemonade ($<span id="sellPrice">2</span>)</button>
+        <button onclick="buyIce()">Buy Ice ($1)</button>
+        
+        <h2>Lemon Harvesting</h2>
+        <svg id="lemonTree" viewBox="0 0 200 200" onclick="harvestLemon()">
+            <path d="M100,180 L100,80 M70,120 L130,120 M80,100 L120,100 M90,80 L110,80" stroke="#8B4513" stroke-width="10"/>
+            <circle cx="100" cy="50" r="40" fill="#90EE90"/>
+            <circle id="lemon1" cx="80" cy="70" r="15" fill="#FFFF00"/>
+            <circle id="lemon2" cx="120" cy="70" r="15" fill="#FFFF00"/>
+            <circle id="lemon3" cx="100" cy="40" r="15" fill="#FFFF00"/>
+        </svg>
+        <div id="harvestProgress">
+            <div id="harvestBar"></div>
+        </div>
+        
+        <h2>Upgrades</h2>
+        <div class="upgrades">
+            <div class="upgrade">
+                <button onclick="buyUpgrade('lemonQuality')">Improve Lemon Quality</button>
+                <div class="upgrade-info">Cost: $<span id="lemonQualityCost">5</span></div>
+                <div class="upgrade-info">Level: <span id="lemonQualityLevel">1</span></div>
+            </div>
+            <div class="upgrade">
+                <button onclick="buyUpgrade('lemonadePrice')">Increase Lemonade Price</button>
+                <div class="upgrade-info">Cost: $<span id="lemonadePriceCost">10</span></div>
+                <div class="upgrade-info">Level: <span id="lemonadePriceLevel">1</span></div>
+            </div>
+            <div class="upgrade">
+                <button onclick="buyUpgrade('standEfficiency')">Improve Stand Efficiency</button>
+                <div class="upgrade-info">Cost: $<span id="standEfficiencyCost">15</span></div>
+                <div class="upgrade-info">Level: <span id="standEfficiencyLevel">1</span></div>
+            </div>
+            <div class="upgrade">
+                <button onclick="buyUpgrade('harvestSpeed')">Improve Harvest Speed</button>
+                <div class="upgrade-info">Cost: $<span id="harvestSpeedCost">20</span></div>
+                <div class="upgrade-info">Level: <span id="harvestSpeedLevel">1</span></div>
+            </div>
+        </div>
+        <div id="notification"></div>
+    </div>
+
+    <script>
+        let money = 10;
+        let lemons = 0;
+        let lemonade = 0;
+        let ice = 0;
+        let lemonQuality = 1;
+        let lemonadePrice = 2;
+        let standEfficiency = 1;
+        let harvestSpeed = 1;
+        let harvestProgress = 0;
+        let day = 1;
+        let dayProgress = 0;
+        let weather = 'sunny';
+        let customerSatisfaction = 100;
+
+        const upgrades = {
+            lemonQuality: { cost: 5, level: 1 },
+            lemonadePrice: { cost: 10, level: 1 },
+            standEfficiency: { cost: 15, level: 1 },
+            harvestSpeed: { cost: 20, level: 1 }
+        };
+
+        const weatherIcons = {
+            'sunny': '☀️',
+            'cloudy': '☁️',
+            'rainy': '🌧️',
+            'hot': '🔥'
+        };
+
+        function updateDisplay() {
+            document.getElementById('money').textContent = money;
+            document.getElementById('lemons').textContent = lemons;
+            document.getElementById('lemonade').textContent = lemonade;
+            document.getElementById('ice').textContent = ice;
+            document.getElementById('sellPrice').textContent = lemonadePrice;
+            document.getElementById('day').textContent = day;
+            document.getElementById('weatherIcon').textContent = weatherIcons[weather];
+            document.getElementById('satisfaction').textContent = customerSatisfaction;
+            
+            for (const [key, value] of Object.entries(upgrades)) {
+                document.getElementById(`${key}Cost`).textContent = value.cost;
+                document.getElementById(`${key}Level`).textContent = value.level;
+            }
+        }
+
+        function harvestLemon() {
+            harvestProgress += harvestSpeed * 10;
+            document.getElementById('harvestBar').style.width = `${harvestProgress}%`;
+            
+            if (harvestProgress >= 100) {
+                lemons += 1;
+                harvestProgress = 0;
+                document.getElementById('harvestBar').style.width = '0%';
+                updateDisplay();
+            }
+        }
+
+        function makeLemonade() {
+            const lemonsNeeded = Math.max(1, 3 - lemonQuality);
+            if (lemons >= lemonsNeeded && ice > 0) {
+                lemons -= lemonsNeeded;
+                ice -= 1;
+                lemonade += standEfficiency;
+                updateDisplay();
+            } else {
+                showNotification("Not enough lemons or ice to make lemonade!");
+            }
+        }
+
+        function sellLemonade() {
+            if (lemonade >= 1) {
+                lemonade -= 1;
+                let salePrice = lemonadePrice;
+                if (weather === 'hot') salePrice *= 1.5;
+                if (weather === 'rainy') salePrice *= 0.75;
+                money += salePrice;
+                updateCustomerSatisfaction();
+                updateDisplay();
+            } else {
+                showNotification("No lemonade to sell!");
+            }
+        }
+
+        function buyIce() {
+            if (money >= 1) {
+                money -= 1;
+                ice += 5;
+                updateDisplay();
+            } else {
+                showNotification("Not enough money to buy ice!");
+            }
+        }
+
+        function buyUpgrade(upgradeType) {
+            const upgrade = upgrades[upgradeType];
+            if (money >= upgrade.cost) {
+                money -= upgrade.cost;
+                upgrade.level += 1;
+                upgrade.cost = Math.floor(upgrade.cost * 1.5);
+                
+                switch(upgradeType) {
+                    case 'lemonQuality':
+                        lemonQuality += 0.5;
+                        break;
+                    case 'lemonadePrice':
+                        lemonadePrice += 0.5;
+                        break;
+                    case 'standEfficiency':
+                        standEfficiency += 0.5;
+                        break;
+                    case 'harvestSpeed':
+                        harvestSpeed += 0.5;
+                        break;
+                }
+                
+                updateDisplay();
+            } else {
+                showNotification("Not enough money for this upgrade!");
+            }
+        }
+
+        function updateWeather() {
+            const weathers = ['sunny', 'cloudy', 'rainy', 'hot'];
+            weather = weathers[Math.floor(Math.random() * weathers.length)];
+            updateDisplay();
+        }
+
+        function updateCustomerSatisfaction() {
+            let change = Math.random() * 10 - 5;
+            if (weather === 'hot' && ice > 0) change += 5;
+            if (weather === 'rainy') change -= 5;
+            customerSatisfaction = Math.max(0, Math.min(100, customerSatisfaction + change));
+            updateDisplay();
+        }
+
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        function gameLoop() {
+            dayProgress += 1;
+            document.getElementById('dayBar').style.width = `${dayProgress}%`;
+            
+            if (dayProgress >= 100) {
+                day += 1;
+                dayProgress = 0;
+                updateWeather();
+                document.getElementById('dayBar').style.width = '0%';
+                showNotification(`Day ${day} has started! The weather is ${weather}.`);
+            }
+            
+            updateDisplay();
+        }
+
+        setInterval(gameLoop, 1000);
+        updateDisplay();
+    </script>
+</body>
+</html>
