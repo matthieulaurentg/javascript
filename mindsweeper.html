@@ -13,6 +13,7 @@
             --cell-revealed: #e0e0e0;
             --text-color: #34495e;
             --mine-color: #e74c3c;
+            --flag-color: #f1c40f;
         }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -63,6 +64,8 @@
             cursor: pointer;
             transition: all 0.3s ease;
             border-radius: 3px;
+            position: relative;
+            overflow: hidden;
         }
         .cell:hover {
             background-color: var(--primary-color);
@@ -75,6 +78,25 @@
         .cell.mine {
             background-color: var(--mine-color);
             color: white;
+        }
+        .cell.flagged::before {
+            content: '🚩';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 18px;
+        }
+        .cell .content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .cell.revealed .content {
+            opacity: 1;
         }
         #message {
             margin-top: 20px;
@@ -136,6 +158,7 @@
         const numMines = 10;
         let board = [];
         let revealed = [];
+        let flagged = [];
         let gameOver = false;
 
         function createBoard() {
@@ -145,6 +168,7 @@
 
             board = Array(boardSize).fill().map(() => Array(boardSize).fill(0));
             revealed = Array(boardSize).fill().map(() => Array(boardSize).fill(false));
+            flagged = Array(boardSize).fill().map(() => Array(boardSize).fill(false));
 
             // Place mines
             let minesPlaced = 0;
@@ -168,6 +192,13 @@
                     cell.dataset.row = row;
                     cell.dataset.col = col;
                     cell.addEventListener('click', () => revealCell(row, col));
+                    cell.addEventListener('contextmenu', (e) => {
+                        e.preventDefault();
+                        flagCell(row, col);
+                    });
+                    const content = document.createElement('div');
+                    content.classList.add('content');
+                    cell.appendChild(content);
                     gameBoard.appendChild(cell);
                 }
             }
@@ -188,7 +219,7 @@
         }
 
         function revealCell(row, col) {
-            if (gameOver || revealed[row][col]) return;
+            if (gameOver || revealed[row][col] || flagged[row][col]) return;
 
             revealed[row][col] = true;
             const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
@@ -196,12 +227,12 @@
 
             if (board[row][col] === -1) {
                 cell.classList.add('mine');
-                cell.textContent = '💣';
+                cell.querySelector('.content').textContent = '💣';
                 gameOver = true;
                 document.getElementById('message').textContent = 'Game Over! You hit a mine.';
             } else if (board[row][col] > 0) {
-                cell.textContent = board[row][col];
-                cell.style.color = getNumberColor(board[row][col]);
+                cell.querySelector('.content').textContent = board[row][col];
+                cell.querySelector('.content').style.color = getNumberColor(board[row][col]);
             } else {
                 // Reveal adjacent cells for empty cells
                 for (let i = -1; i <= 1; i++) {
@@ -218,6 +249,29 @@
             checkWin();
         }
 
+        function flagCell(row, col) {
+            if (gameOver || revealed[row][col]) return;
+
+            const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+            
+            if (flagged[row][col]) {
+                flagged[row][col] = false;
+                cell.classList.remove('flagged');
+            } else {
+                flagged[row][col] = true;
+                cell.classList.add('flagged');
+                
+                if (board[row][col] !== -1) {
+                    gameOver = true;
+                    cell.classList.add('revealed');
+                    cell.querySelector('.content').textContent = '❌';
+                    document.getElementById('message').textContent = 'Game Over! You flagged a non-mine cell.';
+                }
+            }
+
+            checkWin();
+        }
+
         function getNumberColor(num) {
             const colors = ['#3498db', '#2ecc71', '#e74c3c', '#9b59b6', '#f1c40f', '#1abc9c', '#34495e', '#7f8c8d'];
             return colors[num - 1] || '#000000';
@@ -226,7 +280,9 @@
         function checkWin() {
             const totalCells = boardSize * boardSize;
             const revealedCells = revealed.flat().filter(cell => cell).length;
-            if (revealedCells === totalCells - numMines) {
+            const correctlyFlaggedMines = flagged.flat().filter((flag, index) => flag && board.flat()[index] === -1).length;
+            
+            if (revealedCells === totalCells - numMines && correctlyFlaggedMines === numMines) {
                 gameOver = true;
                 document.getElementById('message').textContent = 'Congratulations! You won!';
             }
